@@ -1,0 +1,531 @@
+/* Resume page-specific layout. Shared typography, spacing and semantic blocks stay in globals.css. */
+
+/* Profile, common intro and contact form one information unit. */
+.resumeHero:global(.page-hero) {
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  gap: clamp(var(--sp-xl), 5vw, var(--sp-xxl));
+  padding: clamp(44px, 7vw, 84px) 0 clamp(36px, 6vw, 68px);
+  align-items: start;
+}
+
+.headerIdentity {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(var(--sp-lg), 4vw, var(--sp-xxl));
+  min-width: 0;
+}
+
+.profilePhoto {
+  flex: 0 0 auto;
+  width: clamp(140px, 13vw, 176px);
+  height: auto;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  object-fit: cover;
+  object-position: 50% 32%;
+  background: var(--pearl);
+}
+
+.heroCopy {
+  min-width: 0;
+  max-width: 760px;
+}
+
+.identityName {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.heroLede {
+  max-width: 680px;
+  margin: var(--sp-md) 0 0;
+  color: var(--ink-80);
+  font-size: clamp(17px, 2vw, 21px);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.heroKeywords {
+  max-width: 680px;
+  margin-top: var(--sp-lg);
+  font-size: 15px;
+}
+
+.contactPanel {
+  justify-self: end;
+  align-self: start;
+  width: min(100%, 300px);
+  padding: var(--sp-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  background: var(--pearl);
+}
+
+.contactHeading {
+  margin: 0 0 var(--sp-sm);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contactItem {
+  display: grid !important;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: var(--sp-sm);
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 0;
+  border-top: 1px solid var(--hairline);
+  overflow-wrap: anywhere;
+}
+
+.contactLabel {
+  color: var(--ink-80);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Technical skills: four equal cards make scope and project proof readable before tags. */
+.skillGrid {
+  gap: var(--sp-lg);
+}
+
+.skillCard {
+  display: flex;
+  min-width: 0;
+  min-height: 100%;
+  flex-direction: column;
+  padding: clamp(var(--sp-md), 2.4vw, var(--sp-lg));
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  background: var(--paper);
+}
+
+/* Override the shared first-row border reset: every category remains a complete card. */
+.skillCard.skillCard {
+  padding: clamp(var(--sp-md), 2.4vw, var(--sp-lg));
+  border-top: 1px solid var(--hairline);
+}
+
+.skillCard h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+
+.skillScope {
+  margin: var(--sp-sm) 0 0;
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.skillUsage {
+  display: grid;
+  grid-template-columns: 66px minmax(0, 1fr);
+  gap: var(--sp-sm);
+  margin: var(--sp-md) 0 0;
+  padding: var(--sp-sm) 0;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink-80);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.skillLabel {
+  color: var(--ink-80);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.skillSet {
+  margin-top: var(--sp-md);
+}
+
+.skillSet + .skillSet {
+  margin-top: var(--sp-sm);
+}
+
+.skillSetLabel {
+  margin: 0 0 7px;
+  color: var(--ink-80) !important;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.skillList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skillItem {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid var(--hairline);
+  border-radius: 9px;
+  background: var(--pearl);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.skillItem::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--ink-48);
+}
+
+.skillItemCore {
+  border-color: rgba(0, 102, 204, 0.24);
+  background: rgba(0, 102, 204, 0.07);
+  font-weight: 600;
+}
+
+.skillItemCore::before {
+  background: var(--blue);
+}
+
+.skillListSupporting {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.skillListSupporting .skillItem {
+  min-height: 32px;
+  padding: 6px 9px;
+  border-radius: var(--r-pill);
+  background: var(--paper);
+  color: var(--ink-80);
+  font-size: 12px;
+}
+
+.skillListSupporting .skillItem::before {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+/* Project rows: desktop text 1fr + media 320–380px; mobile order is intro → media → details → links. */
+.projectCard {
+  break-inside: avoid;
+}
+
+.projectIndex {
+  display: grid;
+  align-content: start;
+  gap: var(--sp-xs);
+  color: var(--ink-80);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+}
+
+.projectDomain {
+  color: var(--blue);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.projectBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+  grid-template-areas:
+    "intro visual"
+    "details visual"
+    "stack visual"
+    "links visual";
+  gap: var(--sp-lg) clamp(var(--sp-lg), 4vw, var(--sp-xxl));
+  min-width: 0;
+  align-items: start;
+}
+
+.projectHeader {
+  grid-area: intro;
+  min-width: 0;
+}
+
+.projectHeader h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(23px, 2.7vw, 32px);
+  line-height: 1.18;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.projectAppeal {
+  max-width: 760px;
+  margin: var(--sp-sm) 0 0;
+  color: var(--ink);
+  font-size: clamp(19px, 2.2vw, 25px);
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+  text-wrap: pretty;
+}
+
+.projectVisual {
+  grid-area: visual;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: var(--sp-sm);
+  align-self: start;
+}
+
+.projectImageFrame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background: var(--wash);
+}
+
+.projectImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.projectDetails {
+  grid-area: details;
+  min-width: 0;
+  max-width: 760px;
+}
+
+.projectTable {
+  width: 100%;
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.projectTable th,
+.projectTable td {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  vertical-align: top;
+}
+
+.projectTable tr:last-child th,
+.projectTable tr:last-child td {
+  border-bottom: 0;
+}
+
+.projectTable th {
+  width: 112px;
+  padding-right: var(--sp-lg);
+  color: var(--ink-80);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.projectTable td {
+  color: var(--ink-80);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.projectMetaValue {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-xs) var(--sp-md);
+}
+
+.projectMetaValue span + span::before {
+  content: "·";
+  margin-right: var(--sp-md);
+  color: var(--ink-48);
+}
+
+.projectTableMetric td {
+  color: var(--ink) !important;
+  font-size: 14px;
+}
+
+.projectStackBlock {
+  grid-area: stack;
+  min-width: 0;
+}
+
+.stackLabel {
+  margin: 0;
+  color: var(--ink-80);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+}
+
+.projectStack {
+  margin-top: var(--sp-xs);
+}
+
+.projectStack > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.projectLinks {
+  grid-area: links;
+  min-width: 0;
+}
+
+@media (max-width: 833px) {
+  /* Keep the contact panel beside the identity until the requested 640px breakpoint. */
+  .resumeHero:global(.page-hero) {
+    grid-template-columns: minmax(0, 1fr) minmax(210px, 260px);
+    gap: var(--sp-xl);
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .headerIdentity {
+    gap: var(--sp-lg);
+  }
+
+  .projectBody {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+    gap: var(--sp-md) var(--sp-lg);
+  }
+}
+
+@media (max-width: 640px) {
+  .resumeHero:global(.page-hero) {
+    grid-template-columns: 1fr;
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+
+  .contactPanel {
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .skillUsage {
+    grid-template-columns: 60px minmax(0, 1fr);
+  }
+
+  .projectBody {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "intro"
+      "visual"
+      "details"
+      "stack"
+      "links";
+    gap: var(--sp-md);
+  }
+
+  .projectIndex {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .headerIdentity {
+    display: grid;
+    grid-template-columns: clamp(96px, 26vw, 112px) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--sp-md);
+  }
+
+  .profilePhoto {
+    width: 100%;
+    max-width: 112px;
+  }
+
+  .skillList {
+    grid-template-columns: 1fr;
+  }
+
+  .projectTable th {
+    width: 92px;
+    padding-right: var(--sp-md);
+  }
+
+  .projectTable td {
+    font-size: 14px;
+  }
+}
+
+@media print {
+  .resumeHero:global(.page-hero) {
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 12px;
+    padding: 8px 0;
+  }
+
+  .profilePhoto {
+    width: 100px;
+    height: 134px;
+    border-color: #000;
+    background: #fff;
+  }
+
+  .contactPanel,
+  .skillCard,
+  .projectVisual {
+    border-color: #000;
+    background: #fff;
+  }
+
+  .skillGrid {
+    gap: 12px;
+  }
+
+  .projectBody {
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 12px;
+  }
+
+  .projectVisual {
+    padding: 6px;
+  }
+}

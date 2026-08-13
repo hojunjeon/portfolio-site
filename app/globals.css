@@ -1,0 +1,1436 @@
+/* ============================================================================
+   토큰 — 값의 출처는 전부 DESIGN.md 이다. 새 색·새 크기를 만들지 않는다.
+   대응표는 runs/2026-08-10-porfolio-site/03-내비게이션-및-디자인-시스템.md 5-3.
+   ========================================================================== */
+@import "tailwindcss";
+
+/* defect #10: Pretendard Variable — self-hosted.
+   CDN 로드 제거, 로컬 @font-face 선언. npm 패키지 pretendard에서 woff2 사용.
+   오프라인 실패 시 system-ui 페일오버 유지. */
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("/fonts/PretendardVariable.woff2") format("woff2");
+  font-weight: 45 920;
+  font-display: swap;
+}
+
+:root {
+  /* 잉크와 텍스트 — #1d1d1f 는 잉크 전용이다. 타일 배경으로 쓰지 않는다. */
+  --ink: #1d1d1f;              /* {colors.ink} */
+  --ink-80: #333333;           /* {colors.ink-muted-80} — 라이트 표면 본문·보조 */
+  --ink-48: #7a7a7a;           /* {colors.ink-muted-48} — 비활성 전용. 본문 텍스트에 쓰지 않는다(흰 배경 4.29:1) */
+  --on-dark: #ffffff;          /* {colors.body-on-dark} */
+  --on-dark-muted: #cccccc;    /* {colors.body-muted} */
+
+  /* 액센트 — 클릭 신호는 이 한 계열뿐이다. */
+  --blue: #0066cc;             /* {colors.primary} */
+  --blue-on-dark: #2997ff;     /* {colors.primary-on-dark} — 다크 타일 전용 */
+  --focus: #0071e3;            /* {colors.primary-focus} */
+  --blue-deep: #004b96;        /* 계약 외. 밝은 배경 위 텍스트 대비 전용 + primary-button hover fill */
+
+  /* 표면 */
+  --paper: #ffffff;            /* {colors.canvas} */
+  --wash: #f5f5f7;             /* {colors.canvas-parchment} */
+  --pearl: #fafafc;            /* {colors.surface-pearl} */
+  --black: #000000;            /* {colors.surface-black} — 전역 내비 전용 */
+  --tile-1: #272729;           /* {colors.surface-tile-1} */
+  --tile-2: #2a2a2c;           /* {colors.surface-tile-2} */
+  --tile-3: #252527;           /* {colors.surface-tile-3} */
+
+  /* 헤어라인 — 다크 표면에는 테두리를 두지 않는다(색 변화가 구분선). */
+  --hairline: #e0e0e0;         /* {colors.hairline} */
+  --divider-soft: #f0f0f0;     /* {colors.divider-soft} */
+
+  /* 간격 {spacing} */
+  --sp-xxs: 4px;
+  --sp-xs: 8px;
+  --sp-sm: 12px;
+  --sp-md: 17px;
+  --sp-lg: 24px;
+  --sp-xl: 32px;
+  --sp-xxl: 48px;
+
+  /* 둥글기 {rounded} — 0 / 8 / 11 / 18 / pill 다섯 등급만 쓴다. */
+  --r-sm: 8px;
+  --r-md: 11px;
+  --r-lg: 18px;
+  --r-pill: 9999px;
+
+  /* 레이아웃 */
+  --nav-h: 44px;               /* {component.global-nav} height — 앵커 보정과 모바일 트레이가 이 값에 연동된다 */
+  --max: 1180px;
+  --gutter: clamp(20px, 4vw, 56px);
+  --section: 64px;             /* compact section rhythm — ≤734px 에서 48px */
+
+  /* 타이포 사다리 (반응형 단계에서 갱신) */
+  --fs-hero: 56px;             /* {typography.hero-display} */
+  --fs-h2: 40px;               /* {typography.display-lg} */
+  --fs-lede: 28px;             /* {typography.lead} */
+
+  /* Detail pages use a slightly tighter editorial scale so each project's
+     context, evidence, and diagrams stay in view together. These tokens are
+     scoped by the AI/Robotics/Autonomous modules below; the hub and resume
+     keep the original spacing contract. */
+  --detail-section: clamp(32px, 4vw, 40px);
+  --detail-space-xl: clamp(22px, 2.5vw, 28px);
+  --detail-space-lg: clamp(16px, 2vw, 20px);
+  --detail-space-md: clamp(11px, 1.4vw, 14px);
+  --detail-space-sm: clamp(8px, 1vw, 10px);
+  --detail-space-xs: 6px;
+  --detail-card-padding: clamp(14px, 1.5vw, 18px);
+  --detail-title: clamp(34px, 3.2vw, 40px);
+  --detail-index-size: clamp(36px, 4.2vw, 48px);
+  --detail-card-title: clamp(22px, 2.2vw, 26px);
+  --detail-message: clamp(18px, 1.9vw, 22px);
+  --detail-body-size: 16px;
+  --detail-meta-size: 13px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--wash); }
+/* 앵커 착지 보정: .site-header 가 position: sticky 이므로 보정이 없으면
+   앵커로 이동한 섹션 제목이 헤더 아래에 가려진다.
+   바 높이(--nav-h)에 숨 쉴 여백 {spacing.lg}
+을 더한 값으로 두어, 바 높이를 바꾸면
+   보정도 함께 따라오게 한다. 모바일 내비(details)는 position: absolute 로 겹쳐 뜨므로
+   헤더를 밀어내지 않아 폭별로 값을 나눌 필요가 없다.
+   (설계 문서의 110/160px 은 topbar 44 + subbar 52 인 이중 헤더를 가정한 값이다.
+   이 사이트는 단일 바이므로 그대로 쓰면 제목 위에 150px 넘는 빈 공간이 생긴다.) */
+[id] { scroll-margin-top: calc(var(--nav-h) + var(--sp-lg)); }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Pretendard Variable", "Pretendard", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 17px;              /* {typography.body} — 16px 아님 */
+  font-weight: 400;
+  line-height: 1.47;
+  letter-spacing: 0;             /* §4-2 한글 자간 재조정: body 0 */
+  /* 한국어 단어가 줄 끝에서 중간에 잘리지 않게 한다. 긴 URL 등은 예외적으로 끊는다. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+/* body 를 여기 넣으면 `font` 단축 속성이 위에서 정한 font-size/line-height 를
+   html(Tailwind preflight: 16px / 1.5)에서 다시 상속해 17px·1.47 이 무효가 된다.
+   폼 컨트롤에만 적용한다. */
+button, input, select, textarea { font: inherit; }
+a { color: inherit; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+.site-shell { min-height: 100vh; background: var(--paper); }
+/* Hub 전용 루트. 히어로가 흰 캔버스 위에서 시작하도록 표면을 고정한다. */
+.home-shell { background: var(--paper); }
+.skip-link {
+  position: fixed; z-index: 50; left: 16px; top: -64px;
+  min-height: 44px; padding: 11px 22px; border-radius: var(--r-pill);
+  color: var(--on-dark); background: var(--blue-deep); text-decoration: none;
+}
+.skip-link:focus { top: 12px; }
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  color: var(--on-dark); background: var(--black);
+}
+.site-header-inner, .site-footer-inner {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--max));
+  margin: 0 auto;
+}
+.site-header-inner {
+  min-height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; gap: var(--sp-lg);
+}
+.brand {
+  display: inline-flex; align-items: center; min-height: var(--nav-h);
+  color: var(--on-dark); font-size: 12px; font-weight: 400; line-height: 1;
+  letter-spacing: -0.12px; text-decoration: none;
+}
+.desktop-nav {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-xxs);
+  font-size: 12px; line-height: 1; letter-spacing: -0.12px;
+}
+.desktop-nav a {
+  display: inline-flex; align-items: center; min-height: 32px; padding: 10px 12px;
+  color: var(--on-dark-muted); text-decoration: none;
+}
+/* 활성 표시는 텍스트 색만. 배경 pill·밑줄·점을 쓰지 않는다. */
+.desktop-nav a[aria-current="page"] { color: var(--on-dark); }
+.mobile-nav { display: none; position: relative; }
+.mobile-nav summary {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; min-width: 64px; cursor: pointer; list-style: none;
+  color: var(--on-dark); font-size: 14px; line-height: 1.29; letter-spacing: -0.224px;
+}
+.mobile-nav summary::-webkit-details-marker { display: none; }
+.mobile-nav nav {
+  position: absolute; right: 0; top: calc(var(--nav-h) + var(--sp-xxs)); z-index: 1;
+  display: grid; min-width: 220px; padding: var(--sp-xs);
+  background: var(--tile-1); border-radius: var(--r-sm);
+}
+.mobile-nav nav a {
+  display: flex; align-items: center; min-height: 44px; padding: var(--sp-xs) var(--sp-sm);
+  color: var(--on-dark-muted); text-decoration: none;
+  font-size: 14px; line-height: 1.29; letter-spacing: -0.224px;
+}
+.mobile-nav nav a[aria-current="page"] { color: var(--on-dark); }
+/* ============================================================================
+   타이포 사다리
+   ========================================================================== */
+h1, h2, h3, p { margin-top: 0; }
+h1, h2, h3 { text-wrap: balance; }
+h1 {
+  margin-bottom: 0; font-size: var(--fs-hero); line-height: 1.07;
+  letter-spacing: -0.01em; font-weight: 800;  /* §4-2 h1 자간 -0.01em, weight 800 */
+}
+h2 {
+  margin-bottom: 0; font-size: var(--fs-h2); line-height: 1.10;
+  letter-spacing: -0.01em; font-weight: 800;  /* §4-2 h2 자간 -0.01em, weight 800 */
+}
+h3 {
+  margin-bottom: var(--sp-sm); font-size: 21px; line-height: 1.19;
+  letter-spacing: 0.231px; font-weight: 600;
+}
+.eyebrow {
+  margin: 0 0 14px; color: var(--blue); font-size: 12px; font-weight: 700;
+  line-height: 1; letter-spacing: .12em; text-transform: uppercase;
+}
+.hero-lede {
+  max-width: 680px; margin: 26px 0 0; color: var(--ink-80);
+  font-size: var(--fs-lede); line-height: 1.14; letter-spacing: 0.196px;
+}
+/* ============================================================================
+   Hub 히어로
+   ========================================================================== */
+.home-main { overflow: clip; }
+.home-hero, .page-hero {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--max));
+  margin: 0 auto;
+}
+.home-hero {
+  min-height: min(740px, calc(100vh - var(--nav-h)));
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(280px, .95fr);
+  align-items: center; gap: clamp(var(--sp-xl), 7vw, 100px); padding: var(--section) 0;
+}
+.home-hero-copy { max-width: 700px; }
+/* Hub 히어로의 이름·직무 한 줄 블록. 히어로 제목과 리드 사이에 놓인다. */
+.hero-identity { margin: var(--sp-lg) 0 0; }
+.hero-name {
+  margin: 0; font-size: 21px; font-weight: 600; line-height: 1.19; letter-spacing: 0.231px;
+}
+.hero-role {
+  margin: var(--sp-xxs) 0 0; color: var(--ink-80);
+  font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.374px;
+}
+.action-row { display: flex; flex-wrap: wrap; gap: var(--sp-sm); margin-top: var(--sp-xl); }
+.button {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-xs);
+  min-height: 44px; padding: 11px 22px; border-radius: var(--r-pill);
+  font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.374px;
+  text-decoration: none;
+}
+.button-primary { color: var(--on-dark); background: var(--blue); }
+.button-primary:hover { background: var(--blue-deep); }
+.button-quiet { color: var(--blue); border: 1px solid var(--blue); }
+.home-hero-panel {
+  position: relative; min-height: 390px; overflow: hidden;
+  color: var(--on-dark); background: var(--tile-1); border-radius: var(--r-lg);
+  /* Blocker E: restore padding so stat content isn't jammed at edges */
+  padding: var(--sp-xl) var(--sp-xxl);
+}
+/* §4-5 .hero-orbit 제거 (슬롭 텔: 떠 있는 추상 원) */
+/* Hub Hero 패널 — 대표 성과 3줄 via StatRow */
+.home-hero-panel .stat-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-lg);
+  margin: 0;
+}
+/* ============================================================================
+   섹션 · 표면 — 풀블리드 섹션 타일은 둥글리지 않고, 색 변화가 구분선이다.
+   ========================================================================== */
+.home-work { color: var(--ink); background: var(--wash); }
+.home-work > * {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--max));
+  margin-left: auto; margin-right: auto;
+}
+.page-body-section { padding: var(--section) 0; border-radius: 0; }
+.page-body-section > * {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--max));
+  margin-left: auto; margin-right: auto;
+}
+/* ============================================================================
+   공통 포트폴리오 블록 — 라우트가 공유하는 semantic foundation
+
+   기존 .page-body-section/.content-grid 규칙은 그대로 두고, 새 페이지
+   골격이 사용할 수 있는 kebab-case 별칭만 이곳에 둔다. 컨테이너는 헤더·
+   푸터와 같은 --max/--gutter 계약을 사용한다. 새 색·그림자·그라디언트는
+   만들지 않는다.
+   ========================================================================== */
+.portfolio-container {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--max));
+  margin-inline: auto;
+}
+
+.block {
+  display: flow-root;
+  padding-block: var(--section);
+}
+.block > * {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--max));
+  margin-inline: auto;
+}
+
+.block--compact {
+  padding-block: var(--sp-xl);
+}
+
+.block--flush {
+  padding-block: 0;
+}
+
+/* Overview: 동일한 카드 골격을 쓰되, 링크가 아닌 article도 안전하게 렌더한다. */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: var(--sp-md);
+}
+
+.overview-card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--sp-md);
+  min-width: 0;
+  min-height: 220px;
+  padding: var(--sp-lg);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  text-decoration: none;
+}
+
+.overview-card:hover {
+  color: var(--ink);
+  background: var(--pearl);
+  border-color: currentColor;
+}
+
+.overview-card :is(h2, h3, p) { margin-bottom: 0; }
+.overview-card h2,
+.overview-card h3 { color: inherit; }
+.overview-card p { color: inherit; }
+.overview-card :is(.overview-index, .overview-kicker) {
+  color: var(--ink-80);
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: 0;
+}
+
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark, .route-hero-slate) .overview-card,
+.overview-card--dark {
+  color: var(--on-dark);
+  background: var(--tile-2);
+  border-color: transparent;
+}
+
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark, .route-hero-slate) .overview-card:hover,
+.overview-card--dark:hover {
+  color: var(--on-dark);
+  background: var(--tile-3);
+  border-color: currentColor;
+}
+
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark, .route-hero-slate) .overview-card :is(.overview-index, .overview-kicker),
+.overview-card--dark :is(.overview-index, .overview-kicker) {
+  color: var(--on-dark-muted);
+}
+
+/* Detail/story: 본문은 읽기 폭을 유지하고 상세 블록 사이에는 한 단계의
+   간격만 둔다. 시각 자료는 .media-slot이 자체 폭을 결정한다. */
+.project-detail {
+  display: grid;
+  gap: var(--sp-xl);
+  min-width: 0;
+}
+
+.project-detail + .project-detail { margin-top: var(--section); }
+
+.project-story {
+  display: grid;
+  gap: var(--sp-md);
+  max-width: 72ch;
+  min-width: 0;
+}
+
+.project-story > :is(h2, h3, p, ul, ol) { margin-block: 0; }
+.project-story > :is(ul, ol) { padding-inline-start: 1.25em; }
+
+/* Media slot: figure/div 둘 다 지원해 기존 route module과 공존한다. */
+.media-slot {
+  display: grid;
+  gap: var(--sp-sm);
+  min-width: 0;
+  margin: 0;
+  padding: var(--sp-md);
+  color: var(--ink);
+  background: var(--pearl);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+}
+
+/* 모든 상세 프로젝트의 대표 이미지는 콘텐츠 열을 동일하게 채운다. */
+.primary-media {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+}
+
+.primary-media :is(img, video, svg) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.media-slot > :is(img, video, svg),
+.media-slot :is(.media-frame, .media-figure) > :is(img, video, svg) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.media-slot figcaption,
+.media-slot > .media-caption {
+  color: var(--ink-80);
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: 0;
+}
+
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark, .route-hero-slate) .media-slot,
+.media-slot--dark {
+  color: var(--on-dark);
+  background: var(--tile-2);
+  border-color: transparent;
+}
+
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark, .route-hero-slate) .media-slot :is(figcaption, .media-caption),
+.media-slot--dark :is(figcaption, .media-caption) { color: var(--on-dark-muted); }
+
+/* 키워드는 메타데이터 칩이 아니라 짧은 텍스트 레일로 유지한다. */
+.keyword-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--sp-md);
+  row-gap: var(--sp-xs);
+  margin: var(--sp-md) 0 0;
+  padding: 0;
+  color: var(--ink-80);
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: 0;
+  list-style: none;
+}
+
+.keyword-row > * {
+  position: relative;
+  min-width: 0;
+}
+
+.keyword-row > * + *::before {
+  content: "·";
+  position: absolute;
+  left: calc(var(--sp-md) * -0.65);
+  color: var(--ink-48);
+}
+
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark, .route-hero-slate) .keyword-row,
+.keyword-row--dark { color: var(--on-dark-muted); }
+
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark, .route-hero-slate) .keyword-row > * + *::before,
+.keyword-row--dark > * + *::before { color: var(--on-dark-muted); }
+
+/* Related navigation: 링크 수가 2~4개여도 동일한 baseline으로 정렬한다. */
+.related-nav {
+  display: grid;
+  gap: var(--sp-lg);
+  min-width: 0;
+}
+
+.related-nav > :is(ul, .related-links, .related-nav-links) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.related-nav :is(a, .related-link) {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.29;
+  letter-spacing: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark, .route-hero-slate) .related-nav :is(a, .related-link),
+.related-nav--dark :is(a, .related-link) { color: var(--blue-on-dark); }
+
+/* 후보 미디어는 기본 콘텐츠와 구분되는 review-only details semantics를
+   지원한다. 닫힌 상태에서도 summary는 키보드로 접근할 수 있다. */
+:is(.candidate-review, .candidate-details, .media-candidates, [data-review-only="media-candidates"]) {
+  margin-top: var(--sp-md);
+  padding-top: var(--sp-sm);
+  border-top: 1px solid var(--hairline);
+}
+
+:is(.candidate-review, .candidate-details, .media-candidates, [data-review-only="media-candidates"]) > summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--ink-80);
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: 0;
+}
+
+:is(.candidate-review, .candidate-details, .media-candidates, [data-review-only="media-candidates"]) > summary::-webkit-details-marker {
+  display: none;
+}
+
+:is(.candidate-review, .candidate-details, .media-candidates, [data-review-only="media-candidates"]) > summary::before {
+  content: "+";
+  width: 1em;
+  margin-right: var(--sp-xs);
+  color: currentColor;
+  font-size: 18px;
+  line-height: 1;
+}
+
+:is(.candidate-review, .candidate-details, .media-candidates, [data-review-only="media-candidates"])[open] > summary::before {
+  content: "−";
+}
+
+:is(.candidate-review, .candidate-details, .media-candidates, [data-review-only="media-candidates"]) > :is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-sm);
+  margin-top: var(--sp-sm);
+}
+
+:is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) > figure {
+  min-width: 0;
+  margin: 0;
+}
+
+:is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) img,
+:is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+}
+
+:is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) figcaption {
+  margin-top: var(--sp-xxs);
+  color: var(--ink-80);
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+/* 공통 포커스·반응형·인쇄 유틸리티. 전역 :focus-visible과 같은 계약을
+   따르며, 클래스가 없어도 기존 링크/버튼의 접근성은 유지된다. */
+.focus-ring:focus-visible,
+.focusable:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.responsive-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.print-only { display: none; }
+.screen-only { display: initial; }
+.print-avoid { break-inside: avoid; }
+.print-break-before { break-before: page; }
+.surface-dark { color: var(--on-dark); background: var(--tile-1); }
+.surface-tile-2 { color: var(--on-dark); background: var(--tile-2); }
+.surface-tile-3 { color: var(--on-dark); background: var(--tile-3); }
+.surface-wash { background: var(--wash); }
+.surface-pearl { background: var(--pearl); }
+.surface-warm { background: var(--wash); }  /* §4-3 #f3eee7 → var(--wash) */
+.route-hero-dark { color: var(--on-dark); background: var(--tile-1); }
+.route-hero-slate { color: var(--on-dark); background: var(--tile-1); }  /* §4-3 #333a43 → var(--tile-1) */
+.route-hero-warm { background: var(--wash); }  /* §4-3 #f3eee7 → var(--wash) */
+.route-hero-blue { color: var(--ink); background: #eaf4ff; }
+/* 다크 표면 공통 처리 — 이 목록이 "다크 문맥"의 정의다. */
+/* 슬레이트 표면에서 #2997ff 는 3.81:1 로 미달한다. 라벨을 흰색으로 올린다. */
+.route-hero-slate .eyebrow { color: var(--on-dark); }
+.route-hero-slate .hero-lede { color: var(--on-dark-muted); }
+.route-hero-warm .hero-lede { color: var(--ink-80); }
+.route-hero-blue .eyebrow { color: var(--blue-deep); }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: var(--sp-xl); margin-bottom: 36px; }
+.section-heading > p, .section-heading-aside { max-width: 380px; margin-bottom: var(--sp-xxs); color: var(--ink-80); }
+.section-copy { max-width: 720px; color: var(--ink-80); font-size: 17px; line-height: 1.47; letter-spacing: -0.374px; }
+.section-copy strong { color: var(--ink); font-weight: 600; }
+/* 블록 사이 상단 여백. FlowDiagram·표·그리드 뒤에 오는 라벨이나 카드가
+   앞 블록에 맞닿지 않게 한다(robotics #architecture 의 "실제 파이프라인" 라벨). */
+.split-top { margin-top: var(--sp-xxl); }
+/* ============================================================================
+   Hub 카드
+   ========================================================================== */
+.page-card-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.page-card {
+  position: relative; min-height: 320px; display: flex; flex-direction: column;
+  padding: var(--sp-lg); border: 1px solid var(--hairline); border-radius: var(--r-lg);
+  text-decoration: none;
+}
+/* hover 부양(translateY) 폐기. 위치·크기는 변하지 않고 톤만 이동한다. */
+.page-card:hover { border-color: currentColor; }
+.page-card-blue { color: var(--blue-deep); background: var(--paper); }
+.page-card-blue:hover { background: var(--pearl); }
+.page-card-dark { color: var(--on-dark); background: var(--tile-1); border-color: var(--tile-1); }
+.page-card-dark:hover { background: var(--tile-2); border-color: var(--tile-2); }
+.page-card-slate { color: var(--on-dark); background: var(--tile-1); border-color: var(--tile-1); }  /* §4-3 #333a43 → var(--tile-1) */
+.page-card-warm { color: var(--ink); background: var(--wash); border-color: var(--hairline); }  /* §4-3 #f3eee7 → var(--wash) */
+.page-card-warm:hover { background: var(--pearl); }
+.card-index { margin-bottom: 50px; font-size: 14px; font-weight: 400; line-height: 1.43; letter-spacing: -0.224px; opacity: .8; }
+.card-kicker { margin-bottom: 10px; font-size: 14px; font-weight: 400; line-height: 1.43; letter-spacing: -0.224px; opacity: .8; }
+.page-card h3 { max-width: 250px; }
+.page-card p { margin-bottom: 26px; color: inherit; opacity: .8; }
+.card-link { margin-top: auto; font-size: 14px; font-weight: 600; line-height: 1.29; letter-spacing: -0.224px; }
+/* ============================================================================
+   Status 배지 — 4색은 이 사이트 고유의 "근거 상태" 의미 부호다.
+   링크가 아니고 hover·그림자·글로우를 붙이지 않는다. 5번째 색을 추가하지 않는다.
+   ========================================================================== */
+/* Tag — Hub Reading Note 와 기술 스택 나열 두 곳에만 쓴다. */
+/* ============================================================================
+   페이지 히어로 · 본문 카드
+   ========================================================================== */
+.page-hero { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; min-height: clamp(360px, 40vw, 440px); padding: var(--section) 0; }
+.page-hero-copy { max-width: 840px; }
+.page-hero h1 { max-width: 820px; }
+.page-hero .hero-lede { max-width: 720px; }
+
+/* The three detail routes share a compact hero rhythm. Keeping this in the
+   global shell avoids three subtly different first-viewport scales while
+   leaving Resume's page hero untouched. */
+:is(.route-hero-blue, .route-hero-slate, .route-hero-warm) .page-hero {
+  min-height: clamp(320px, 34vw, 400px);
+  padding-block: var(--detail-section);
+}
+:is(.route-hero-blue, .route-hero-slate, .route-hero-warm) .hero-lede {
+  font-size: clamp(18px, 2.1vw, 22px);
+}
+:is(.route-hero-blue, .route-hero-slate, .route-hero-warm) .page-hero h1 {
+  font-size: clamp(32px, 3.5vw, 40px);
+  line-height: 1.05;
+}
+
+@media (max-width: 833px) {
+  :is(.route-hero-blue, .route-hero-slate, .route-hero-warm) .page-hero {
+    min-height: clamp(280px, 38vw, 320px);
+  }
+
+  :root {
+    --detail-section: 32px;
+    --detail-space-xl: 22px;
+    --detail-space-lg: 16px;
+    --detail-space-md: 11px;
+    --detail-space-sm: 8px;
+    --detail-card-padding: 14px;
+    --detail-title: 30px;
+    --detail-index-size: 40px;
+    --detail-card-title: 22px;
+    --detail-message: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  :is(.route-hero-blue, .route-hero-slate, .route-hero-warm) .page-hero {
+    min-height: auto;
+  }
+
+  :is(.route-hero-blue, .route-hero-slate, .route-hero-warm) .page-hero h1 {
+    font-size: var(--detail-title);
+  }
+
+  :is(.route-hero-blue, .route-hero-slate, .route-hero-warm) .hero-lede {
+    font-size: var(--detail-message);
+  }
+}
+
+@media (max-width: 419px) {
+  :root {
+    --detail-title: 26px;
+    --detail-index-size: 32px;
+    --detail-card-title: 20px;
+    --detail-message: 17px;
+    --detail-card-padding: 13px;
+  }
+}
+.content-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-md); }
+.content-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.info-card {
+  padding: var(--sp-lg); border: 1px solid var(--hairline);
+  background: var(--paper); border-radius: var(--r-lg);
+}
+/* 다크 표면 위에서는 테두리를 두지 않는다. 타일 계조가 경계다. */
+.surface-tile-2 .info-card { border: 0; background: var(--tile-3); }
+.info-card h3 { margin-top: var(--sp-md); }
+.info-card p { margin-bottom: 0; color: var(--ink-80); }
+/* 차간거리 추종 카드의 정적 강조. 애니메이션·글로우·그림자 없이
+   표면 계조를 한 단 내려(잉크) 형제 카드와 구분한다. */
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; }
+/* ============================================================================
+   Viz 컴포넌트 시스템 (§5)
+   ========================================================================== */
+/* Stat — 큰 숫자 + 라벨 */
+.stat { display: grid; gap: var(--sp-xxs); }
+.stat-figure {
+  font-size: clamp(34px, 4.5vw, 48px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.stat-dark .stat-figure { color: var(--on-dark); }
+.stat-emphasis .stat-figure { color: var(--blue-deep); }
+.stat-dark.stat-emphasis .stat-figure { color: var(--blue-on-dark); }
+.stat-label {
+  margin-top: var(--sp-xxs);
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+  color: var(--ink-80);
+}
+.stat-dark .stat-label { color: var(--on-dark-muted); }
+/* defect #9: ring-stat/delta-stat 다크 라벨 선택자 추가 */
+.ring-stat-dark .stat-label { color: var(--on-dark-muted); }
+.delta-stat-dark .stat-label { color: var(--on-dark-muted); }
+.stat-sub {
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+  color: var(--ink-80);
+}
+.stat-dark .stat-sub { color: var(--on-dark-muted); }
+/* StatRow — Stat 가로 배치 (equal-height grid) */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sp-xl);
+  margin: var(--sp-xl) 0;
+}
+.stat-row > * { min-height: 100%; }
+/* DeltaStat — before → after */
+.delta-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  flex-wrap: wrap;
+}
+.delta-before {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink-80);
+  font-variant-numeric: tabular-nums;
+}
+.delta-stat-dark .delta-before { color: var(--on-dark-muted); }
+.delta-arrow {
+  font-size: 20px;
+  color: var(--ink-80);
+  flex: 0 0 auto;
+  line-height: 1;
+}
+.delta-stat-dark .delta-arrow { color: var(--on-dark-muted); }
+.delta-after {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.delta-stat-dark .delta-after { color: var(--on-dark); }
+.delta-stat .stat-label { width: 100%; margin-top: var(--sp-xs); }
+/* RingStat — SVG 링 게이지 */
+.ring-stat {
+  display: grid;
+  gap: var(--sp-xs);
+  justify-items: center;
+}
+.ring-stat svg {
+  width: 140px;
+  max-width: 100%;
+  aspect-ratio: 1;
+}
+.ring-stat .stat-figure { justify-self: center; }
+/* BarCompare — 가로 막대 비교 */
+.bar-compare {
+  display: grid;
+  gap: var(--sp-lg);
+  margin: var(--sp-xl) 0;
+  padding: var(--sp-xl);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  background: var(--pearl);
+}
+.bar-compare-dark {
+  border: 0;
+  background: var(--tile-2);
+}
+.surface-tile-2 .bar-compare-dark { background: var(--tile-3); }
+.bar-compare-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 80px;
+  align-items: center;
+  gap: var(--sp-md);
+}
+.bar-label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+  color: var(--ink-80);
+}
+.bar-compare-dark .bar-label { color: var(--on-dark-muted); }
+.bar-muted .bar-label { opacity: 0.6; }
+.bar-track {
+  display: flex;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--divider-soft);
+  overflow: hidden;
+}
+.bar-compare-dark .bar-track { background: var(--tile-1); }
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--blue-deep);
+  transition: width 0.3s ease;
+}
+.bar-compare-dark .bar-fill { background: var(--blue-on-dark); }
+.bar-muted .bar-fill { opacity: 0.5; }
+.bar-value {
+  text-align: right;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.bar-compare-dark .bar-value { color: var(--on-dark); }
+.bar-muted .bar-value { opacity: 0.6; }
+/* StepGate — 번호 매긴 단계 (01–N) */
+.step-gate {
+  display: grid;
+  gap: var(--sp-lg);
+  margin: var(--sp-xl) 0;
+}
+.step-gate-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--sp-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.step-gate-list li {
+  display: flex;
+  gap: var(--sp-sm);
+  align-items: flex-start;
+}
+.step-index {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+  color: var(--ink-80);
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+.step-gate-dark .step-index { color: var(--on-dark-muted); }
+.step-label {
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+  color: var(--ink-80);
+}
+.step-gate-dark .step-label { color: var(--on-dark-muted); }
+/* Timeline — 세로 타임라인 */
+.viz-timeline {
+  display: grid;
+  gap: var(--sp-lg);
+  margin: var(--sp-xl) 0;
+  padding: 0;
+  list-style: none;
+}
+.viz-timeline li {
+  display: flex;
+  gap: var(--sp-md);
+  padding-left: var(--sp-md);
+  border-left: 2px solid var(--hairline);
+  position: relative;
+}
+.viz-timeline li::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-80);
+}
+.viz-timeline-dark li { border-left-color: var(--tile-2); }
+.viz-timeline-dark li::before { background: var(--on-dark-muted); }
+.timeline-date {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+  color: var(--ink-80);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+.viz-timeline-dark .timeline-date { color: var(--on-dark-muted); }
+.timeline-muted .timeline-date { opacity: 0.6; }
+.timeline-title {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+  color: var(--ink);
+}
+.viz-timeline-dark .timeline-title { color: var(--on-dark); }
+.timeline-muted .timeline-title { opacity: 0.6; }
+.timeline-desc {
+  display: block;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+  color: var(--ink-80);
+  margin-top: var(--sp-xxs);
+}
+.viz-timeline-dark .timeline-desc { color: var(--on-dark-muted); }
+.timeline-muted .timeline-desc { opacity: 0.6; }
+/* StatusTable — 상태 표 */
+.status-table-wrap {
+  margin: var(--sp-xl) 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.status-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 17px;
+  line-height: 1.47;
+  letter-spacing: -0.374px;
+}
+.status-table caption {
+  caption-side: top;
+  text-align: left;
+  padding-bottom: var(--sp-sm);
+  color: var(--ink-80);
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.224px;
+}
+.status-table th,
+.status-table td {
+  padding: var(--sp-sm) var(--sp-md) var(--sp-sm) 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--hairline);
+}
+.status-table th:last-child,
+.status-table td:last-child { padding-right: 0; }
+.status-table thead th {
+  color: var(--ink-80);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.29;
+  letter-spacing: -0.224px;
+}
+.status-table tbody th {
+  color: var(--ink);
+  font-weight: 600;
+}
+.status-table tbody td {
+  color: var(--ink-80);
+}
+.status-table tbody tr:last-child th,
+.status-table tbody tr:last-child td { border-bottom: 0; }
+.status-table .status-wip { color: var(--ink-80); }  /* 상태는 대비를 유지하고 텍스트로 구분 */
+.status-table-dark { border: 0; background: var(--tile-2); }
+.surface-tile-2 .status-table-dark { background: var(--tile-3); }
+.status-table-dark .status-table {
+  color: var(--on-dark);
+}
+.status-table-dark .status-table th,
+.status-table-dark .status-table td { border-bottom-color: transparent; }
+.status-table-dark .status-table thead th { color: var(--on-dark-muted); }
+.status-table-dark .status-table tbody th { color: var(--on-dark); }
+.status-table-dark .status-table tbody td { color: var(--on-dark-muted); }
+/* ArchDiagram — 노드-엣지 다이어그램 */
+.arch-diagram {
+  display: grid;
+  gap: var(--sp-lg);
+  margin: var(--sp-xl) 0;
+}
+/* Architecture diagrams stay inside their card at every viewport.  The SVG
+   owns the responsive width; this wrapper is a visual frame, not a scrolling
+   or keyboard interaction surface. */
+.arch-diagram-scroll {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden !important;
+  padding: var(--sp-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  background: var(--pearl);
+}
+.arch-diagram-scroll svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+.arch-diagram-dark .arch-diagram-scroll {
+  border: 0;
+  background: var(--tile-2);
+}
+.surface-tile-2 .arch-diagram-dark .arch-diagram-scroll {
+  background: var(--tile-3);
+}
+/* ============================================================================
+   FlowDiagram
+   ========================================================================== */
+.flow-diagram {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px;
+  margin-top: var(--sp-xl); padding: var(--sp-xl) var(--sp-md);
+  border: 1px solid var(--hairline); background: var(--pearl); border-radius: var(--r-lg);
+}
+.flow-diagram-dark { border: 0; background: var(--tile-2); }
+/* tile-2 섹션 위에서는 컨테이너가 배경과 같은 값이 되어 사라진다. 한 계조 내린다. */
+.surface-tile-2 .flow-diagram-dark { background: var(--tile-3); }
+.flow-item-group { display: inline-flex; align-items: center; gap: 10px; }
+.flow-item {
+  display: inline-flex; align-items: center; min-height: 42px; padding: var(--sp-xs) 14px;
+  border: 1px solid var(--hairline); border-radius: var(--r-pill);
+  color: var(--blue); background: var(--paper);
+  font-size: 14px; font-weight: 600; line-height: 1.29; letter-spacing: -0.224px; white-space: nowrap;
+}
+.flow-diagram-dark .flow-item { border: 0; color: var(--blue-on-dark); background: var(--tile-1); }
+.flow-arrow { color: var(--blue); font-size: 24px; line-height: 1; }
+.flow-diagram-dark .flow-arrow { color: var(--blue-on-dark); }
+/* ============================================================================
+   pill-list (기술 스택 나열)
+   ========================================================================== */
+.pill-list { display: flex; flex-wrap: wrap; gap: var(--sp-xs); margin: 20px 0 0; padding: 0; list-style: none; }
+.pill-list li {
+  display: inline-flex; min-height: 32px; align-items: center; padding: 5px 10px;
+  border: 1px solid var(--hairline); border-radius: var(--r-pill);
+  color: var(--ink-80); font-size: 14px; line-height: 1.43; letter-spacing: -0.224px;
+}
+.surface-tile-2 .pill-list li { background: var(--tile-3); }
+/* Related projects: 세 카테고리 페이지가 같은 규격을 쓴다.
+   카드 높이가 달라도 링크 줄이 한 baseline 에 오도록 링크를 카드 하단에 고정한다. */
+.related-card { display: flex; flex-direction: column; }
+.related-card > .related-link { margin-top: auto; }
+/* 링크 밑줄은 상시 표시한다. hover 에서 밑줄을 "생기게" 하지 않는다
+   (계약: hover 미정의 / 앤티슬롭: 자라나는 밑줄 금지).
+   유일한 hover 신호는 전역 a:hover 의 text-decoration-thickness 이다. */
+.related-link, .resume-detail-link, .resume-project-links .external-link {
+  display: inline-flex; align-items: center; min-height: 44px;
+  color: var(--blue); font-size: 14px; font-weight: 600; line-height: 1.29; letter-spacing: -0.224px;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+/* 다크 타일 위에서는 #0066cc 가 3.03:1 로 읽히지 않는다. 밝은 파랑으로 교체한다. */
+/* Resume 프로젝트 카드에서 상세 페이지로 내려가는 링크 줄. */
+.resume-project-links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-md); margin-top: 14px; }
+.route-contact { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.route-contact a {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 11px 22px;
+  border: 1px solid currentColor; border-radius: var(--r-pill);
+  color: var(--blue); font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.374px;
+  text-decoration: none;
+}
+/* ============================================================================
+   Resume
+   ========================================================================== */
+.resume-header { padding: 0; }
+.resume-header-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, .45fr); gap: var(--sp-xxl); align-items: end; }
+.resume-title { font-size: var(--fs-hero); }
+.resume-role {
+  margin: var(--sp-md) 0 0; color: var(--ink);
+  font-size: var(--fs-lede); font-weight: 400; line-height: 1.14; letter-spacing: 0.196px;
+}
+/* 주 직무 문구 아래 보조 라벨. 주 문구보다 작고 조용하다. */
+.resume-role-support {
+  margin: var(--sp-xs) 0 0; color: var(--ink-80);
+  font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.374px;
+}
+/* 관심 직무 4항목. pill 처리를 하지 않는다 — .pill-list 와 treatment 가 겹치면
+   "모든 메타데이터를 칩으로" 텔이 된다. 타이포 위계로만 구분한다. */
+.resume-focus-list {
+  display: flex; flex-wrap: wrap; gap: var(--sp-xxs) 20px;
+  margin: var(--sp-sm) 0 0; padding: 0; list-style: none;
+  color: var(--ink-80); font-size: 14px; line-height: 1.43; letter-spacing: -0.224px;
+}
+.resume-contact { display: grid; gap: var(--sp-xs); justify-items: start; align-content: end; margin: 0; font-style: normal; }
+.resume-contact a { display: inline-flex; align-items: center; min-height: 44px; color: var(--blue); font-size: 14px; line-height: 1.43; letter-spacing: -0.224px; overflow-wrap: anywhere; }
+.resume-section { border-top: 1px solid var(--hairline); }
+.resume-section + .resume-section { margin-top: var(--section); }
+.resume-section-title { display: flex; align-items: baseline; gap: var(--sp-md); margin-bottom: 30px; }
+.resume-section-title .section-number { color: var(--ink-80); font-size: 14px; font-weight: 600; line-height: 1.29; letter-spacing: -0.224px; }
+.resume-section-title h2 { font-size: 34px; line-height: 1.47; letter-spacing: -0.374px; }
+.skill-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--sp-xl); }
+.skill-group { padding: 20px 0; border-top: 1px solid var(--hairline); }
+.skill-group:nth-child(-n+2) { border-top: 0; padding-top: 0; }
+.skill-group h3 { margin-bottom: var(--sp-xs); font-size: 17px; font-weight: 600; line-height: 1.24; letter-spacing: -0.374px; }
+.skill-group p { margin-bottom: 0; color: var(--ink-80); }
+:is(.surface-dark, .surface-tile-2, .surface-tile-3) .skill-group { border-top-color: transparent; }
+:is(.surface-dark, .surface-tile-2, .surface-tile-3) .skill-group p { color: var(--on-dark-muted); }
+/* 프로젝트 한눈에 보기 표.
+   래퍼가 가로 스크롤을 흡수해 좁은 폭에서 페이지 본문이 가로로 밀리지 않게 한다. */
+.resume-overview-wrap {
+  margin: 0 0 var(--sp-xxl);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.resume-overview {
+  width: 100%; min-width: 560px; border-collapse: collapse; text-align: left;
+  font-size: 17px; line-height: 1.47; letter-spacing: -0.374px;
+}
+.resume-overview caption {
+  caption-side: top; text-align: left; padding-bottom: var(--sp-sm);
+  color: var(--ink-80); font-size: 14px; line-height: 1.43; letter-spacing: -0.224px;
+}
+.resume-overview th, .resume-overview td {
+  padding: var(--sp-sm) var(--sp-md) var(--sp-sm) 0;
+  text-align: left; vertical-align: top; border-bottom: 1px solid var(--hairline);
+}
+.resume-overview th:last-child, .resume-overview td:last-child { padding-right: 0; }
+.resume-overview thead th {
+  color: var(--ink-80); font-size: 14px; font-weight: 600; line-height: 1.29; letter-spacing: -0.224px;
+}
+.resume-overview tbody th { color: var(--ink); font-weight: 600; }
+.resume-overview tbody td { color: var(--ink-80); }
+.resume-overview tbody tr:last-child th, .resume-overview tbody tr:last-child td { border-bottom: 0; }
+/* 표 안이라고 터치 타깃을 지우지 않는다. 행이 조금 높아지는 편이 낫다. */
+.resume-overview .resume-detail-link { min-height: 44px; }
+.resume-projects { display: grid; gap: 0; }
+.resume-project { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: var(--sp-lg); padding: var(--sp-lg) 0; border-top: 1px solid var(--hairline); }
+.resume-project:first-child { border-top: 0; padding-top: 0; }
+.resume-project-index { color: var(--ink-80); font-size: 14px; font-weight: 600; line-height: 1.29; letter-spacing: -0.224px; }
+.resume-project h3 { margin-bottom: 6px; }
+.resume-project-meta { margin-bottom: var(--sp-sm); color: var(--ink-80); font-size: 14px; line-height: 1.43; letter-spacing: -0.224px; }
+.resume-project p { margin-bottom: var(--sp-xs); color: var(--ink-80); }
+.resume-project-label { color: var(--ink); font-weight: 600; }
+.resume-project .pill-list { margin-top: var(--sp-sm); }
+/* 자격 · 어학 · 병역 3줄. */
+.resume-credential-list {
+  display: grid; gap: var(--sp-xs); margin: 0 0 var(--sp-md); padding: 0; list-style: none;
+  color: var(--ink-80);
+}
+/* ============================================================================
+   푸터 — 파치먼트 바닥. 헤더(순검정)와 대칭이 되지 않게 한다.
+   ========================================================================== */
+.site-footer { padding: 64px 0; color: var(--ink-80); background: var(--wash); border-radius: 0; }
+.site-footer-inner { display: flex; align-items: end; justify-content: space-between; gap: 28px; }
+.footer-kicker { margin-bottom: var(--sp-xs); color: var(--ink); font-size: 14px; font-weight: 600; line-height: 1.29; letter-spacing: -0.224px; }
+.footer-copy { margin: 0; color: var(--ink-80); font-size: 12px; line-height: 1.3; letter-spacing: -0.12px; }
+.footer-nav { display: flex; flex-wrap: wrap; justify-content: end; gap: 2px; font-size: 17px; line-height: 2.41; letter-spacing: 0; }
+.footer-nav a {
+  display: inline-flex; align-items: center; min-height: 44px; padding: var(--sp-xs) var(--sp-sm);
+  color: var(--blue); text-decoration: none;
+}
+.footer-nav a[aria-current="page"] { color: var(--ink); }
+
+/* 다크 표면 파생 규칙 — 죽은 클래스 정리 과정에서 :is() 목록에 섞여 삭제된 것을 복원 */
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark) :is(.section-heading-aside, .section-copy, .hero-lede) { color: var(--on-dark-muted); }
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark) .eyebrow { color: var(--blue-on-dark); }
+:is(.surface-dark, .surface-tile-2, .surface-tile-3, .route-hero-dark) .section-heading > p { color: var(--on-dark-muted); }
+:is(.surface-dark, .surface-tile-2, .surface-tile-3) .section-copy strong { color: var(--on-dark); }
+:is(.surface-dark, .surface-tile-3) .info-card { border: 0; background: var(--tile-2); }
+:is(.surface-dark, .surface-tile-2, .surface-tile-3) .info-card p { color: var(--on-dark-muted); }
+:is(.surface-dark, .surface-tile-2, .surface-tile-3) .pill-list li { border-color: transparent; background: var(--tile-2); color: var(--on-dark-muted); }
+:is(.surface-dark, .surface-tile-2, .surface-tile-3) :is(.related-link, .resume-detail-link, .external-link) { color: var(--blue-on-dark); }
+:is(.surface-dark, .surface-tile-2, .surface-tile-3) .route-contact a { color: var(--blue-on-dark); }
+
+/* ============================================================================
+   반응형 — DESIGN.md 브레이크포인트 1440 / 1068 / 833 / 734 / 640 / 419.
+   각 단계는 누적 적용된다(예: 700px 은 833·734 규칙을 함께 받는다).
+   ≥1441px 은 --max(1180px)가 이미 콘텐츠를 고정하므로 별도 규칙이 없다.
+   ========================================================================== */
+
+/* 1069–1440px : 데스크톱 기본값 그대로 */
+
+/* ≤1068px — 소형 데스크톱. 히어로 56px → 40px */
+@media (max-width: 1068px) {
+  :root { --fs-hero: 40px; }
+  .page-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* ≤833px — 태블릿 세로. 전역 내비가 메뉴 트레이로 붕괴한다. */
+@media (max-width: 833px) {
+  .desktop-nav { display: none; }
+  .mobile-nav { display: block; }
+  .home-hero { min-height: auto; grid-template-columns: 1fr; }
+  .home-hero-panel { min-height: 340px; }
+  .page-hero { min-height: 460px; }
+  .content-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .related-nav > :is(ul, .related-links, .related-nav-links) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .resume-header-grid { grid-template-columns: 1fr; align-items: start; }
+  .resume-contact { justify-items: start; }
+  .section-heading { display: block; }
+  .section-heading > p, .section-heading-aside { margin-top: var(--sp-md); }
+}
+/* ≤734px — 큰 폰. 타일 세로 패딩 80px → 48px */
+@media (max-width: 734px) {
+  :root { --gutter: 20px; --section: 48px; }
+  .split-top { margin-top: var(--sp-xl); }
+  .site-header-inner { min-height: var(--nav-h); }
+}
+/* ≤640px — 폰. 히어로 40px → 34px, 모든 그리드 1단 */
+@media (max-width: 640px) {
+  :root { --fs-hero: 34px; --fs-h2: 34px; --fs-lede: 21px; }
+  h1 br, h2 br { display: none; }
+  .page-hero { min-height: auto; }
+  .page-card-grid, .content-grid, .content-grid-3, .skill-grid { grid-template-columns: 1fr; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .related-nav > :is(ul, .related-links, .related-nav-links) { grid-template-columns: 1fr; }
+  :is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) { grid-template-columns: 1fr; }
+  /* defect #13: StepGate 모바일 2열 폴백 */
+  .step-gate-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .skill-group:nth-child(-n+2) { border-top: 1px solid var(--hairline); padding-top: 20px; }
+  .skill-group:first-child { border-top: 0; padding-top: 0; }
+  .home-hero-panel { min-height: 290px; }
+  /* Defect #5: Reduce hero panel horizontal padding to fit 290px diagram at 375/419 viewports */
+  .home-hero-panel { padding: var(--sp-xl) var(--sp-md); }
+  .arch-diagram-scroll { padding: var(--sp-md); }
+  .flow-diagram { justify-content: flex-start; }
+  .flow-item-group { width: 100%; justify-content: space-between; }
+  .flow-arrow { transform: rotate(90deg); }
+  .resume-project { grid-template-columns: 1fr; gap: var(--sp-xs); }
+  .resume-project-index { margin-bottom: 2px; }
+  .site-footer-inner { display: block; }
+  .footer-nav { justify-content: start; margin-top: 22px; margin-left: -12px; }
+}
+/* ≤419px — 소형 폰. 히어로 34px → 28px */
+@media (max-width: 419px) {
+  :root { --fs-hero: 28px; --fs-h2: 28px; }
+}
+/* ============================================================================
+   모션 — 허용 목록은 press 축소 / 부드러운 앵커 스크롤 /
+   밑줄 두께 변화 + ArchDiagram 엣지 animation (§4-6)
+   entrance 애니메이션(opacity:0 시작) 0건.
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .button, .page-card, .route-contact a, .related-link, .resume-detail-link,
+  .resume-project-links .external-link, .skip-link, .desktop-nav a,
+  .footer-nav a, .mobile-nav summary, .mobile-nav nav a {
+    transition: transform .12s ease, background-color .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .button:active, .page-card:active, .route-contact a:active, .related-link:active,
+  .resume-detail-link:active, .resume-project-links .external-link:active,
+  .skip-link:active, .desktop-nav a:active, .footer-nav a:active,
+  .mobile-nav summary:active, .mobile-nav nav a:active {
+    transform: scale(0.95);
+  }
+  /* Defect #9: Overlay motion with visible compositing delta */
+  .arch-edge {
+    /* solid stroke, no animation */
+  }
+  .arch-edge-overlay {
+    /* Shown only in no-preference mode; hidden in reduce */
+    display: block;
+    stroke-dasharray: 6 140;
+    animation: arch-edge-flow 8s linear infinite;
+  }
+  @keyframes arch-edge-flow {
+    0% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: -146; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  /* Defect #9: Hide overlay in reduce mode, show only base edges */
+  .arch-edge-overlay {
+    display: none !important;
+  }
+}
+/* ============================================================================
+   인쇄 — Resume A4 기준. 내비·푸터·장식을 숨기고 다크 섹션을 반전한다.
+   ========================================================================== */
+@media print {
+  @page { size: A4; margin: 14mm; }
+
+  :root { --section: 16px; --gutter: 0px; --max: 100%; --fs-hero: 28pt; --fs-h2: 18pt; --fs-lede: 13pt; }
+
+  html, body { background: #fff !important; color: #000 !important; font-size: 10.5pt; }
+
+  .site-header, .site-footer, .skip-link, .desktop-nav, .mobile-nav,
+  .home-hero-panel, .action-row, .route-contact { display: none !important; }
+
+  [id] { scroll-margin-top: 0 !important; }
+
+  /* 다크·유채색 표면은 전부 흰 배경 검정 잉크로 반전한다. */
+  .surface-dark, .surface-tile-2, .surface-tile-3, .surface-wash, .surface-pearl,
+  .surface-warm, .home-work,
+  .route-hero-dark, .route-hero-slate, .route-hero-warm, .route-hero-blue,
+  .page-card, .page-card-blue, .page-card-dark, .page-card-slate, .page-card-warm,
+  .info-card, .flow-diagram, .flow-diagram-dark, .flow-item, .pill-list li {
+    background: #fff !important;
+    color: #000 !important;
+    border-color: #999 !important;
+  }
+  .eyebrow, .section-copy, .hero-lede, .info-card p, .skill-group p,
+  .resume-project p, .resume-project-meta,
+  .resume-role, .resume-role-support, .resume-focus-list, .resume-credential-list,
+  .section-heading > p, .section-heading-aside, .resume-section-title .section-number,
+  .resume-project-index, .footer-copy, .footer-kicker, .flow-arrow {
+    color: #000 !important;
+  }
+
+  a { color: #000 !important; text-decoration: underline !important; }
+  .resume-contact a[href^="http"]::after,
+  .resume-project-links a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; }
+
+  /* Blocker D: SVG print rules — properly handle fill:none on paths and circles */
+  .arch-diagram svg,
+  .arch-diagram-dark svg {
+    background: #fff !important;
+    border-color: #999 !important;
+  }
+  /* Defect #7: Print dark diagrams with white background */
+  .arch-diagram-dark .arch-diagram-scroll {
+    background: #fff !important;
+    border-color: #999 !important;
+  }
+  /* ArchDiagram: rect (nodes) white bg / black stroke, text black, paths black with no fill, arrowheads black */
+  .arch-diagram svg rect,
+  .arch-diagram-dark svg rect {
+    fill: #fff !important;
+    stroke: #000 !important;
+  }
+  .arch-diagram svg text,
+  .arch-diagram-dark svg text {
+    fill: #000 !important;
+  }
+  .arch-diagram svg path,
+  .arch-diagram-dark svg path {
+    stroke: #000 !important;
+    fill: none !important;
+  }
+  .arch-diagram svg polygon,
+  .arch-diagram-dark svg polygon {
+    fill: #000 !important;
+  }
+  /* RingStat: circles as outline (not fill), text black */
+  .ring-stat svg circle {
+    stroke: #000 !important;
+    fill: none !important;
+  }
+  .ring-stat svg text {
+    fill: #000 !important;
+  }
+
+  /* 배지는 색이 인쇄되지 않아도 읽히도록 테두리로 바꾼다. */
+
+  .content-grid, .content-grid-3, .page-card-grid, .skill-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .resume-overview-wrap { overflow-x: visible !important; }
+  .resume-overview { min-width: 0 !important; }
+  /* Fix #8: shrink wide diagrams to A4 width for print */
+  .arch-diagram-scroll { min-width: 0 !important; }
+  .arch-diagram-scroll svg { min-width: 0 !important; }
+
+  /* §4-7 신규 컴포넌트 print 규칙 — break-inside: avoid, 흰 배경 검정 잉크 */
+  .stat-row, .bar-compare, .step-gate, .viz-timeline, .status-table-wrap,
+  .arch-diagram, .ring-stat, .delta-stat {
+    background: #fff !important;
+    color: #000 !important;
+    border-color: #999 !important;
+    break-inside: avoid;
+  }
+  .stat-figure, .stat-label, .stat-sub,
+  .delta-before, .delta-after, .delta-arrow,
+  .bar-label, .bar-value, .step-index, .step-label,
+  .timeline-date, .timeline-title, .timeline-desc,
+  .status-table caption, .status-table th, .status-table td {
+    color: #000 !important;
+  }
+
+  .info-card, .page-card, .flow-diagram, .resume-project,
+  .skill-group, .related-card, .resume-section-title,
+  .resume-overview tr, h1, h2, h3 {
+    break-inside: avoid;
+  }
+  h1, h2, h3 { break-after: avoid; }
+  .page-body-section, .page-hero, .resume-header { padding: 12px 0 !important; min-height: 0 !important; }
+  .resume-section + .resume-section { margin-top: 12px !important; }
+  .split-top { margin-top: 16px !important; }
+
+  .portfolio-container { width: 100%; }
+  .block { padding-block: 16px !important; }
+  .block--compact, .block--flush { padding-block: 0 !important; }
+  .overview-grid, .related-nav > :is(ul, .related-links, .related-nav-links),
+  :is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) {
+    grid-template-columns: 1fr !important;
+  }
+  .overview-card, .project-detail, .project-story, .media-slot,
+  .related-nav, .candidate-review, .candidate-details, .media-candidates,
+  [data-review-only="media-candidates"] {
+    break-inside: avoid;
+  }
+  .overview-card, .media-slot,
+  :is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) img,
+  :is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) video {
+    color: #000 !important;
+    background: #fff !important;
+    border-color: #999 !important;
+  }
+  .overview-card :is(.overview-index, .overview-kicker),
+  .media-slot figcaption, .media-slot > .media-caption,
+  .keyword-row, .related-nav :is(a, .related-link),
+  :is(.candidate-review, .candidate-details, .media-candidates, [data-review-only="media-candidates"]) > summary,
+  :is(.candidate-grid, .candidate-review-grid, .media-candidate-grid) figcaption {
+    color: #000 !important;
+  }
+  .responsive-scroll { overflow-x: visible !important; }
+  .no-print, .screen-only { display: none !important; }
+  .print-only { display: initial !important; }
+}
+

@@ -1,0 +1,245 @@
+/* Hub: one concise identity block followed by four image-led work tracks.
+   Each card preserves the source image's original color. */
+
+:global(.home-hero) {
+  min-height: 0 !important;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  padding: clamp(64px, 9vw, 112px) 0 clamp(72px, 10vw, 128px);
+}
+
+:global(.home-hero-copy) {
+  max-width: 760px;
+}
+
+:global(.home-hero-copy) :global(.eyebrow) {
+  max-width: 620px;
+  line-height: 1.35;
+}
+
+:global(.home-hero-copy) :global(h1) {
+  max-width: 760px;
+}
+
+.heroLead {
+  max-width: 640px;
+  margin: var(--sp-lg) 0 0;
+  color: var(--ink-80);
+  font-size: clamp(18px, 2.1vw, 23px);
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+
+:global(.home-work) {
+  padding: clamp(28px, 3vw, 40px) 0 clamp(36px, 4vw, 52px);
+}
+
+.workLabel {
+  margin-bottom: clamp(12px, 1.5vw, 18px);
+}
+
+.pageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(10px, 1.2vw, 14px);
+}
+
+:global(.home-work) .pageGrid {
+  width: min(calc(100% - (var(--gutter) * 2)), 640px);
+  margin-inline: auto;
+}
+
+:global(.home-work) .pageCard {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 0;
+  gap: 0;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+:global(.home-work) .pageCard:hover {
+  background: var(--pearl);
+  border-color: var(--ink-48);
+}
+
+:global(.home-work) .pageCard:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.cardVisual {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  width: 100%;
+  aspect-ratio: var(--card-ratio, 16 / 9);
+  margin: 0;
+  overflow: hidden;
+  background: var(--wash);
+  border: 0;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+
+.cardVisual img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  object-fit: contain;
+  object-position: center;
+}
+
+.cardTitle {
+  margin: 0;
+  padding: 10px 12px 12px;
+  color: inherit;
+  font-size: clamp(18px, 1.8vw, 22px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* Desktop keeps the four tracks in a readable 2×2 grid. Shorter viewports
+   reduce vertical rhythm and media height so the complete Hub still fits. */
+@media (min-width: 1200px) {
+  .pageGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  :global(.home-work) .pageCard {
+    padding: 0;
+    gap: 0;
+  }
+
+  .cardTitle {
+    font-size: clamp(17px, 1.25vw, 20px);
+  }
+}
+
+@media (min-width: 834px) and (max-height: 900px) {
+  :global(.home-hero) {
+    padding-top: clamp(22px, 3.5vh, 34px);
+    padding-bottom: clamp(22px, 3.5vh, 34px);
+  }
+
+  .heroLead {
+    margin-top: clamp(10px, 1.8vh, 16px);
+  }
+
+  :global(.home-work) {
+    padding-top: clamp(10px, 1.7vh, 16px);
+    padding-bottom: clamp(14px, 2.2vh, 20px);
+  }
+
+  .workLabel {
+    margin-bottom: 8px;
+  }
+
+  .pageGrid {
+    gap: 10px;
+  }
+
+  :global(.home-work) .pageCard {
+    padding: 0;
+    gap: 0;
+  }
+
+  .cardTitle {
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 834px) and (max-height: 900px) {
+  .cardVisual {
+    height: auto;
+    aspect-ratio: var(--card-ratio, 43 / 24);
+  }
+}
+
+@media (min-width: 834px) and (max-height: 700px) {
+  .cardVisual {
+    height: clamp(104px, 17vh, 120px);
+  }
+}
+
+/* At tall desktop heights the default 16:9 media would make a 2×2 grid
+   exceed the viewport. Keep the same 2×2 structure and cap only the media. */
+@media (min-width: 834px) and (min-height: 901px) {
+  :global(.home-hero) {
+    padding-top: clamp(34px, 5vh, 54px);
+    padding-bottom: clamp(34px, 5vh, 54px);
+  }
+
+  :global(.home-work) {
+    padding-top: clamp(20px, 2.6vh, 28px);
+    padding-bottom: clamp(24px, 3vh, 34px);
+  }
+
+  .workLabel {
+    margin-bottom: 12px;
+  }
+
+  .cardVisual {
+    height: auto;
+    aspect-ratio: var(--card-ratio, 43 / 24);
+  }
+}
+
+@media (max-width: 833px) {
+  :global(.home-hero) {
+    gap: 48px;
+    padding-top: 64px;
+  }
+
+}
+
+@media (max-width: 640px) {
+  :global(.home-hero) {
+    gap: 36px;
+    padding-top: 48px;
+    padding-bottom: 64px;
+  }
+
+  :global(.home-hero-copy) :global(.eyebrow) {
+    max-width: 22rem;
+  }
+
+  .heroLead {
+    font-size: 18px;
+  }
+
+  .pageGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  :global(.home-work) .pageCard {
+    padding: 0;
+    gap: 0;
+  }
+
+  .cardVisual {
+    aspect-ratio: var(--card-ratio, 43 / 24);
+  }
+
+  .cardTitle {
+    font-size: 20px;
+  }
+}
+
+@media print {
+  [data-review-only="media-candidates"] {
+    display: none !important;
+  }
+}
