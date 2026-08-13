@@ -378,6 +378,11 @@ export default function RoboticsPage() {
             eyebrow="Robotics · Perception to Control"
             title={<>감지한 장면을,<br />로봇의 다음 동작으로 연결합니다.</>}
             lede="사과 수확·분류 Edge AI 로봇과 로봇팔 강화학습 오케스트레이션에서 인식·제어·실험의 경계를 다르게 설계한 과정을 보여줍니다."
+            visual={{
+              src: "/evidence/hub/robotics-apple-arm.jpg",
+              alt: "사과를 집고 분류하는 로봇 작업 장면",
+              objectPosition: "center",
+            }}
           >
             <div className="action-row">
               <a className="button button-primary" href="#project-overview">

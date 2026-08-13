@@ -335,6 +335,11 @@ export default function AutonomousDrivingPage() {
             eyebrow="Autonomous Driving · Robot · Vehicle · Simulation"
             title={<>주행을 나누고<br />실행 조건을 고정했습니다.</>}
             lede="모드 라우팅, 차량 제어 역할, 실행 환경 고정이라는 서로 다른 판단을 프로젝트별 흐름으로 보여줍니다."
+            visual={{
+              src: "/evidence/hub/autonomous-sensing.jpg",
+              alt: "교차로 중앙 차량과 주변 센서 영역을 표현한 자율주행 이미지",
+              objectPosition: "center",
+            }}
           >
             <div className="action-row">
               <a className="button button-primary" href="#project-overview">

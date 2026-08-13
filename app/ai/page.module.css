@@ -160,7 +160,8 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--sp-sm);
   max-width: 960px;
-  margin: 0 0 var(--sp-md) calc(40px + var(--sp-md));
+  /* Match the second column of .projectHeader (0.1fr / 1fr + gap). */
+  margin: 0 0 var(--sp-md) calc((100% - var(--detail-space-md)) / 11 + var(--detail-space-md));
 }
 
 .primerBlock {
@@ -1031,6 +1032,10 @@
 
   .projectHeader {
     gap: var(--sp-md);
+  }
+
+  .projectPrimer {
+    margin-left: calc((100% - var(--sp-md)) / 11 + var(--sp-md));
   }
 
   .stateRail {

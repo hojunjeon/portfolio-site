@@ -235,6 +235,11 @@ export default function AiPage() {
             eyebrow="AI Projects · Decisions over demos"
             title={<>모델을 늘리기보다,<br />판단의 경계를 다시 그렸습니다.</>}
             lede="PathFinder, Aegis, Hermes, 주차공간 탐지. 네 프로젝트에서 무엇이 막혔고 어떤 구조로 바꿨는지, 각 전환점에 맞는 시각 증거와 함께 보여줍니다."
+            visual={{
+              src: "/evidence/hub/ai-workflow.jpg",
+              alt: "AI 프로젝트의 입력과 판단 흐름을 연결한 시각 자료",
+              objectPosition: "center",
+            }}
           >
             <div className="action-row">
               <a className="button button-primary" href="#projects-overview">

@@ -103,7 +103,26 @@ export default function Home() {
             <p className={styles.heroLead}>
               이력서와 AI·로보틱스·자율주행 프로젝트를 모은 포트폴리오입니다.
             </p>
+            <div className="hero-identity">
+              <p className="hero-name">전호준</p>
+              <p className="hero-role">AI systems · Robotics · Autonomous driving</p>
+            </div>
+            <div className="action-row">
+              <a className="button button-primary" href="/resume">이력서 보기 <span aria-hidden="true">→</span></a>
+              <a className="button button-secondary" href="#work">프로젝트 탐색 <span aria-hidden="true">↓</span></a>
+            </div>
           </div>
+          <figure className="home-hero-visual">
+            <img
+              src="/evidence/profile.png"
+              alt="전호준 프로필 사진"
+              width="360"
+              height="480"
+              loading="eager"
+              decoding="async"
+            />
+            <figcaption>AI · Robotics · Autonomous Driving</figcaption>
+          </figure>
         </section>
 
         <section id="work" className="home-work" aria-label="작업 트랙">

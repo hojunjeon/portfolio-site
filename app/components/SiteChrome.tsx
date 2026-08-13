@@ -54,7 +54,19 @@ export function PageFooter({ current }: { current: Current }) {
   );
 }
 
-export function PageTitle({ eyebrow, title, lede, children }: { eyebrow: string; title: ReactNode; lede: ReactNode; children?: ReactNode }) {
+export function PageTitle({
+  eyebrow,
+  title,
+  lede,
+  visual,
+  children,
+}: {
+  eyebrow: string;
+  title: ReactNode;
+  lede: ReactNode;
+  visual?: { src: string; alt: string; objectPosition?: string };
+  children?: ReactNode;
+}) {
   return (
     <section className="page-hero" aria-labelledby="page-title">
       <div className="page-hero-copy">
@@ -63,6 +75,17 @@ export function PageTitle({ eyebrow, title, lede, children }: { eyebrow: string;
         <p className="hero-lede">{lede}</p>
         {children}
       </div>
+      {visual ? (
+        <figure className="page-hero-visual">
+          <img
+            src={visual.src}
+            alt={visual.alt}
+            loading="eager"
+            decoding="async"
+            style={{ objectPosition: visual.objectPosition }}
+          />
+        </figure>
+      ) : null}
     </section>
   );
 }

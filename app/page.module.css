@@ -243,3 +243,87 @@
     display: none !important;
   }
 }
+
+/* DESIGN.md refresh: make the Hub a photographic gallery instead of a
+   rounded dashboard grid. The surface change separates tracks without extra
+   borders or shadows. */
+:global(.home-hero) {
+  min-height: min(620px, calc(100vh - var(--nav-h))) !important;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr) !important;
+  align-items: center !important;
+  gap: clamp(var(--sp-xl), 6vw, 96px) !important;
+  padding: var(--section) 0 !important;
+}
+
+:global(.home-hero-copy) { max-width: 720px; }
+
+:global(.home-work) .pageGrid {
+  width: min(calc(100% - (var(--gutter) * 2)), var(--max));
+  max-width: var(--max);
+  gap: 0;
+}
+
+:global(.home-work) .pageCard {
+  min-height: 420px;
+  padding: var(--sp-xxl);
+  gap: var(--sp-lg);
+  color: var(--ink);
+  background: var(--paper);
+  border: 0;
+  border-radius: 0;
+}
+
+:global(.home-work) .pageCard:nth-child(2),
+:global(.home-work) .pageCard:nth-child(3) {
+  color: var(--on-dark);
+  background: var(--tile-1);
+}
+
+:global(.home-work) .pageCard:nth-child(2) .cardVisual,
+:global(.home-work) .pageCard:nth-child(3) .cardVisual {
+  background: var(--tile-2);
+}
+
+:global(.home-work) .pageCard:hover,
+:global(.home-work) .pageCard:nth-child(2):hover,
+:global(.home-work) .pageCard:nth-child(3):hover {
+  border: 0;
+  background: var(--pearl);
+}
+
+:global(.home-work) .pageCard:nth-child(2):hover,
+:global(.home-work) .pageCard:nth-child(3):hover {
+  background: var(--tile-2);
+}
+
+.cardVisual {
+  aspect-ratio: 4 / 3;
+  border-radius: 0;
+  background: var(--wash);
+}
+
+.cardTitle {
+  padding: 0;
+  font-size: clamp(24px, 3vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 833px) {
+  :global(.home-hero) {
+    min-height: 0 !important;
+    grid-template-columns: 1fr !important;
+    gap: var(--sp-xl) !important;
+    padding-block: 64px !important;
+  }
+
+  :global(.home-work) .pageCard { min-height: 360px; }
+}
+
+@media (max-width: 640px) {
+  :global(.home-hero) { padding-block: 48px 64px !important; }
+  :global(.home-work) .pageCard {
+    min-height: 320px;
+    padding: var(--sp-xl);
+  }
+}
