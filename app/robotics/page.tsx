@@ -44,19 +44,19 @@ const projectOverviews: ProjectOverview[] = [
 
 function OverviewCard({ project }: { project: ProjectOverview }) {
   return (
-    <article className={styles.overviewEntry}>
+    <article className={`project-index-item ${styles.overviewEntry}`}>
       <div className={styles.overviewIndex} aria-hidden="true">{project.index}</div>
       <div className={styles.overviewEntryBody}>
         <div className={styles.overviewEntryHeading}>
           <h2>{project.title}</h2>
-          <a className="related-link" href={project.href} aria-label={`${project.title} 프로젝트 보기`}>
-            프로젝트 보기 <span aria-hidden="true">↓</span>
-          </a>
         </div>
-        <p className={styles.overviewMessage}>{project.message}</p>
         <p className={styles.overviewMeta}>{project.meta}</p>
         <p className={styles.overviewKeywords}>{project.keywords}</p>
       </div>
+      <p className={styles.overviewMessage}>{project.message}</p>
+      <a className="related-link" href={project.href} aria-label={`${project.title} 프로젝트 보기`}>
+        프로젝트 보기 <span aria-hidden="true">↓</span>
+      </a>
     </article>
   );
 }
@@ -115,7 +115,7 @@ function ProjectFacts({
   roleText: string;
 }) {
   return (
-    <dl className={`${styles.projectFacts}${period ? "" : ` ${styles.projectFactsCompact}`}`}>
+    <dl className={`project-detail-facts ${styles.projectFacts}${period ? "" : ` ${styles.projectFactsCompact}`}`}>
       {period ? (
         <div>
           <dt>기간</dt>
@@ -136,7 +136,7 @@ function ProjectFacts({
 
 function ProjectPrimer({ content, dark = false }: { content: PrimerContent; dark?: boolean }) {
   return (
-    <div className={`${styles.projectPrimer}${dark ? ` ${styles.projectPrimerDark}` : ""}`}>
+    <div className={`project-detail-primer ${styles.projectPrimer}${dark ? ` ${styles.projectPrimerDark}` : ""}`}>
       <div className={styles.primerBlock}>
         <span className={styles.primerLabel}>사용 맥락</span>
         <p>{content.context}</p>
@@ -151,8 +151,8 @@ function ProjectPrimer({ content, dark = false }: { content: PrimerContent; dark
 
 function ProjectFocus({ message }: { message: string }) {
   return (
-    <div className={styles.projectFocus}>
-      <span>전개 · 핵심 판단</span>
+    <div className={`project-detail-decision ${styles.projectFocus}`}>
+      <span className="decision-label">전개 · 핵심 판단</span>
       <p className={styles.projectMessage}>{message}</p>
     </div>
   );
@@ -165,9 +165,9 @@ function ProjectLinks({ children }: { children: ReactNode }) {
 function AppleProject() {
   return (
     <section id="apple-robot" className={`page-body-section surface-wash ${styles.detailSection}`} aria-labelledby="apple-robot-title">
-      <div className={`project-detail ${styles.detailInner}`}>
+      <div className={`project-detail project-detail-shell ${styles.detailInner}`}>
         <div className={styles.projectIntroduction}>
-          <header className={styles.projectHeader}>
+          <header className={`project-detail-header ${styles.projectHeader}`}>
           <div className={styles.projectNumber} aria-hidden="true">01</div>
           <div>
             <p className="eyebrow">01 / Troubleshooting · Edge pipeline</p>
@@ -195,7 +195,7 @@ function AppleProject() {
             className={styles.appleEvidence}
           />
         </div>
-        <div className={`${styles.projectDevelopment} ${styles.appleDevelopment}`}>
+        <div className={`project-detail-body ${styles.projectDevelopment} ${styles.appleDevelopment}`}>
           <ProjectFocus message="목표점에서 멈추지 못했습니다. HW·SW를 따로 손봐도 진동과 오버슈트가 남았습니다." />
 
         <div className={styles.appleStory}>
@@ -259,9 +259,9 @@ function AppleProject() {
 function RlProject() {
   return (
     <section id="rl-orchestration" className={`page-body-section surface-dark ${styles.detailSection}`} aria-labelledby="rl-orchestration-title">
-      <div className={`project-detail ${styles.detailInner} ${styles.darkProject}`}>
+      <div className={`project-detail project-detail-shell ${styles.detailInner} ${styles.darkProject}`}>
         <div className={styles.projectIntroduction}>
-          <header className={styles.projectHeader}>
+          <header className={`project-detail-header ${styles.projectHeader}`}>
           <div className={styles.projectNumber} aria-hidden="true">02</div>
           <div>
             <p className="eyebrow">02 / Operations design · RL orchestration</p>
@@ -290,7 +290,7 @@ function RlProject() {
             className={styles.rlEvidence}
           />
         </div>
-        <div className={`${styles.projectDevelopment} ${styles.rlDevelopment}`}>
+        <div className={`project-detail-body ${styles.projectDevelopment} ${styles.rlDevelopment}`}>
           <ProjectFocus message="보상 설계와 epoch별 감시를 반복하는 대신, 역할을 분리하고 checkpoint에서 다음 실험을 고르는 자동화 루프를 설계했습니다." />
 
         <div className={styles.rlStory}>
@@ -378,11 +378,6 @@ export default function RoboticsPage() {
             eyebrow="Robotics · Perception to Control"
             title={<>감지한 장면을,<br />로봇의 다음 동작으로 연결합니다.</>}
             lede="사과 수확·분류 Edge AI 로봇과 로봇팔 강화학습 오케스트레이션에서 인식·제어·실험의 경계를 다르게 설계한 과정을 보여줍니다."
-            visual={{
-              src: "/evidence/hub/robotics-apple-arm.jpg",
-              alt: "사과를 집고 분류하는 로봇 작업 장면",
-              objectPosition: "center",
-            }}
           >
             <div className="action-row">
               <a className="button button-primary" href="#project-overview">
@@ -392,9 +387,9 @@ export default function RoboticsPage() {
           </PageTitle>
         </div>
 
-        <section id="project-overview" className={`page-body-section surface-wash ${styles.overviewSection}`} aria-label="Robotics 프로젝트 목록">
+        <section id="project-overview" className={`page-body-section surface-wash project-index ${styles.overviewSection}`} aria-label="Robotics 프로젝트 목록">
           <div>
-            <div className={styles.overviewGrid}>
+            <div className={`project-index ${styles.overviewGrid}`}>
               {projectOverviews.map((project) => <OverviewCard key={project.index} project={project} />)}
             </div>
           </div>

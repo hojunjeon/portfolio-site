@@ -1110,6 +1110,21 @@
   --robotics-measure: 74ch;
 }
 
+/* Shared project contract hooks keep the dense route rhythm discoverable to
+   the other project pages without replacing the route-specific composition. */
+.roboticsPage :where(
+  :global(.project-index),
+  :global(.project-index-item),
+  :global(.project-detail-shell),
+  :global(.project-detail-header),
+  :global(.project-detail-facts),
+  :global(.project-detail-primer),
+  :global(.project-detail-decision),
+  :global(.project-detail-body)
+) {
+  min-width: 0;
+}
+
 .roboticsPage :where(h1, h2, h3, p, dl, ol, ul) {
   max-width: none;
 }

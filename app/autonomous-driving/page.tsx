@@ -75,7 +75,7 @@ function OverviewList({ projects }: { projects: ProjectOverview[] }) {
   return (
     <ol className={styles.overviewList} aria-label="Autonomous 프로젝트 목록">
       {projects.map((project) => (
-        <li className={styles.overviewItem} key={project.index}>
+        <li className={`project-index-item ${styles.overviewItem}`} key={project.index}>
           <span className={styles.overviewIndex}>{project.index}</span>
           <div className={styles.overviewTitleBlock}>
             <span className={styles.overviewType}>{project.type}</span>
@@ -173,7 +173,7 @@ function EnvironmentFigure() {
 
 function ProjectPrimer({ content, dark = false }: { content: PrimerContent; dark?: boolean }) {
   return (
-    <aside className={`${styles.projectPrimer}${dark ? ` ${styles.projectPrimerDark}` : ""}`} aria-label="프로젝트 맥락">
+    <aside className={`project-detail-primer ${styles.projectPrimer}${dark ? ` ${styles.projectPrimerDark}` : ""}`} aria-label="프로젝트 맥락">
       <div className={styles.primerBlock}>
         <span className={styles.primerLabel}>사용 맥락</span>
         <p>{content.context}</p>
@@ -188,7 +188,7 @@ function ProjectPrimer({ content, dark = false }: { content: PrimerContent; dark
 
 function ProjectFacts({ period, form, roleText }: { period?: string; form: string; roleText: string }) {
   return (
-    <dl className={styles.projectFacts}>
+    <dl className={`project-detail-facts ${styles.projectFacts}`}>
       {period ? (
         <div>
           <dt>기간</dt>
@@ -228,8 +228,8 @@ function ProjectDetail({
 }: ProjectDetailProps) {
   return (
     <section id={id} className={`page-body-section ${surface} ${styles.detailSection}${dark ? ` ${styles.darkSurface}` : ""}`} aria-labelledby={titleId}>
-      <div className={styles.detailInner}>
-        <header className={styles.projectHeader}>
+      <div className={`project-detail-shell ${styles.detailInner}`}>
+        <header className={`project-detail-header ${styles.projectHeader}`}>
           <div className={styles.projectNumber} aria-hidden="true">{index}</div>
           <div className={styles.projectHeading}>
             <p className="eyebrow">{eyebrow}</p>
@@ -242,9 +242,9 @@ function ProjectDetail({
         <ProjectPrimer content={primer} dark={dark} />
         <div className={styles.primaryVisual}>{primary}</div>
 
-        <div className={styles.projectDevelopment}>
-          <div className={styles.projectFocus}>
-            <p className={styles.sectionTag}>전개 · 핵심 판단</p>
+        <div className={`project-detail-body ${styles.projectDevelopment}`}>
+          <div className={`project-detail-decision ${styles.projectFocus}`}>
+            <span className={`decision-label ${styles.sectionTag}`}>전개 · 핵심 판단</span>
             <p className={styles.projectMessage}>{message}</p>
           </div>
           <div className={styles.projectBody}>{body}</div>
@@ -335,11 +335,6 @@ export default function AutonomousDrivingPage() {
             eyebrow="Autonomous Driving · Robot · Vehicle · Simulation"
             title={<>주행을 나누고<br />실행 조건을 고정했습니다.</>}
             lede="모드 라우팅, 차량 제어 역할, 실행 환경 고정이라는 서로 다른 판단을 프로젝트별 흐름으로 보여줍니다."
-            visual={{
-              src: "/evidence/hub/autonomous-sensing.jpg",
-              alt: "교차로 중앙 차량과 주변 센서 영역을 표현한 자율주행 이미지",
-              objectPosition: "center",
-            }}
           >
             <div className="action-row">
               <a className="button button-primary" href="#project-overview">
@@ -349,7 +344,7 @@ export default function AutonomousDrivingPage() {
           </PageTitle>
         </div>
 
-        <section id="project-overview" className={`page-body-section surface-wash ${styles.overviewSection}`} aria-label="Autonomous 프로젝트 목록">
+        <section id="project-overview" className={`page-body-section surface-wash project-index ${styles.overviewSection}`} aria-label="Autonomous 프로젝트 목록">
           <div className={styles.overviewWrap}>
             <div className={styles.overviewIntro}>
               <p className="eyebrow">Three project threads</p>

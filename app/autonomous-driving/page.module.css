@@ -599,6 +599,19 @@
   text-transform: uppercase;
 }
 
+/* Shared project contract hooks keep the compact route rhythm discoverable
+   without replacing this page's evidence-led composition. */
+:global(.project-index),
+:global(.project-index-item),
+:global(.project-detail-shell),
+:global(.project-detail-header),
+:global(.project-detail-facts),
+:global(.project-detail-primer),
+:global(.project-detail-decision),
+:global(.project-detail-body) {
+  min-width: 0;
+}
+
 .relatedSection {
   padding-bottom: calc(var(--section) * 0.8);
 }

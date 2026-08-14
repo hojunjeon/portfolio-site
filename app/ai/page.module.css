@@ -12,6 +12,19 @@
   --sp-xs: 5px;
 }
 
+/* Keep the shared semantic shell on the AI route's compact rhythm. */
+:global(.project-index),
+:global(.project-detail-shell),
+:global(.project-detail-body) {
+  --section: var(--detail-section);
+  --sp-xxl: var(--detail-space-xl);
+  --sp-xl: var(--detail-space-lg);
+  --sp-lg: var(--detail-space-md);
+  --sp-md: var(--detail-space-sm);
+  --sp-sm: var(--detail-space-xs);
+  --sp-xs: 5px;
+}
+
 .overviewSection {
   border-top: 1px solid var(--hairline);
 }

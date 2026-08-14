@@ -68,7 +68,7 @@ export function PageTitle({
   children?: ReactNode;
 }) {
   return (
-    <section className="page-hero" aria-labelledby="page-title">
+    <section className="page-hero page-hero-compact" aria-labelledby="page-title">
       <div className="page-hero-copy">
         <p className="eyebrow">{eyebrow}</p>
         <h1 id="page-title">{title}</h1>

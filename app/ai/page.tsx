@@ -83,13 +83,13 @@ const pathfinderFlow: MediaAsset = {
 
 function OverviewItem({ project }: { project: ProjectOverview }) {
   return (
-    <article className={styles.overviewItem}>
+    <article className={`project-index-item ${styles.overviewItem}`}>
       <span className={styles.overviewIndex} aria-hidden="true">{project.index}</span>
       <div className={styles.overviewItemBody}>
         <p className={styles.overviewType}>{project.type}</p>
         <h2>{project.title}</h2>
-        <p className={styles.overviewMessage}>{project.message}</p>
       </div>
+      <p className={styles.overviewMessage}>{project.message}</p>
       <a className={styles.overviewLink} href={project.href} aria-label={`${project.title} 프로젝트 보기`}>
         보기 <span aria-hidden="true">↓</span>
       </a>
@@ -119,7 +119,7 @@ function ProjectHeader({
   dark?: boolean;
 }) {
   return (
-    <header className={`${styles.projectHeader}${dark ? ` ${styles.projectHeaderDark}` : ""}`}>
+    <header className={`project-detail-header ${styles.projectHeader}${dark ? ` ${styles.projectHeaderDark}` : ""}`}>
       <div className={styles.projectNumber} aria-hidden="true">{index}</div>
       <div>
         <p className="eyebrow">{eyebrow}</p>
@@ -133,7 +133,7 @@ function ProjectHeader({
 
 function ProjectFacts({ period, form, roleText }: { period?: string; form: string; roleText: string }) {
   return (
-    <dl className={styles.projectFacts}>
+    <dl className={`project-detail-facts ${styles.projectFacts}`}>
       {period ? (
         <div>
           <dt>기간</dt>
@@ -154,7 +154,7 @@ function ProjectFacts({ period, form, roleText }: { period?: string; form: strin
 
 function ProjectPrimer({ content, dark = false }: { content: PrimerContent; dark?: boolean }) {
   return (
-    <div className={`${styles.projectPrimer}${dark ? ` ${styles.projectPrimerDark}` : ""}`}>
+    <div className={`project-detail-primer ${styles.projectPrimer}${dark ? ` ${styles.projectPrimerDark}` : ""}`}>
       <div className={styles.primerBlock}>
         <span className={styles.primerLabel}>사용 맥락</span>
         <p>{content.context}</p>
@@ -169,8 +169,8 @@ function ProjectPrimer({ content, dark = false }: { content: PrimerContent; dark
 
 function ProjectFocus({ message, storyType }: { message: string; storyType: string }) {
   return (
-    <div className={`${styles.projectFocus} ${styles.decisionZone}`} data-story-type={storyType}>
-      <span className={styles.decisionLabel}>전개 · 핵심 판단</span>
+    <div className={`project-detail-decision ${styles.projectFocus} ${styles.decisionZone}`} data-story-type={storyType}>
+      <span className={`decision-label ${styles.decisionLabel}`}>전개 · 핵심 판단</span>
       <p className={`${styles.projectMessage} ${styles.decisionMessage}`}>{message}</p>
     </div>
   );
@@ -235,11 +235,6 @@ export default function AiPage() {
             eyebrow="AI Projects · Decisions over demos"
             title={<>모델을 늘리기보다,<br />판단의 경계를 다시 그렸습니다.</>}
             lede="PathFinder, Aegis, Hermes, 주차공간 탐지. 네 프로젝트에서 무엇이 막혔고 어떤 구조로 바꿨는지, 각 전환점에 맞는 시각 증거와 함께 보여줍니다."
-            visual={{
-              src: "/evidence/hub/ai-workflow.jpg",
-              alt: "AI 프로젝트의 입력과 판단 흐름을 연결한 시각 자료",
-              objectPosition: "center",
-            }}
           >
             <div className="action-row">
               <a className="button button-primary" href="#projects-overview">
@@ -249,16 +244,16 @@ export default function AiPage() {
           </PageTitle>
         </div>
 
-        <section id="projects-overview" className={`page-body-section surface-wash ${styles.overviewSection}`} aria-label="AI 프로젝트 목록">
+        <section id="projects-overview" className={`page-body-section surface-wash project-index ${styles.overviewSection}`} aria-label="AI 프로젝트 목록">
           <div>
-            <div className={styles.overviewGrid}>
+            <div className={`project-index ${styles.overviewGrid}`}>
               {projectOverviews.map((project) => <OverviewItem key={project.index} project={project} />)}
             </div>
           </div>
         </section>
 
         <section id="pathfinder" className={`page-body-section ${styles.projectSection}`} aria-labelledby="pathfinder-title">
-          <div className={styles.detailInner}>
+          <div className={`project-detail-shell ${styles.detailInner}`}>
             <div className={styles.projectIntroduction}>
               <ProjectHeader
                 titleId="pathfinder-title"
@@ -280,7 +275,7 @@ export default function AiPage() {
               <MediaFigure asset={pathfinderPrimary} className={styles.pathfinderMedia} />
             </div>
 
-            <div className={styles.projectDevelopment} data-story-type="troubleshooting">
+            <div className={`project-detail-body ${styles.projectDevelopment}`} data-story-type="troubleshooting">
               <ProjectFocus storyType="troubleshooting" message="입력을 더 넣는 대신, 관계를 연결했습니다." />
 
               <div className={`${styles.storyLead} ${styles.pathfinderLead}`} data-story-type="pathfinder">
@@ -313,7 +308,7 @@ export default function AiPage() {
         </section>
 
         <section id="aegis" className={`page-body-section surface-wash ${styles.projectSection} ${styles.reframeSection}`} aria-labelledby="aegis-title">
-          <div className={styles.detailInner}>
+          <div className={`project-detail-shell ${styles.detailInner}`}>
             <div className={styles.projectIntroduction}>
               <ProjectHeader
                 titleId="aegis-title"
@@ -335,7 +330,7 @@ export default function AiPage() {
               <MediaFigure asset={aegisPrimary} className={styles.aegisMedia} />
             </div>
 
-            <div className={styles.projectDevelopment} data-story-type="reframing">
+            <div className={`project-detail-body ${styles.projectDevelopment}`} data-story-type="reframing">
               <ProjectFocus storyType="reframing" message="차단 대신, 수사 검토를 위한 데이터를 남기기로 했습니다." />
 
               <div className={styles.reframeChoice} data-story-type="aegis">
@@ -385,7 +380,7 @@ export default function AiPage() {
         </section>
 
         <section id="hermes" className={`page-body-section surface-dark ${styles.projectSection} ${styles.darkSection}`} aria-labelledby="hermes-title">
-          <div className={styles.detailInner}>
+          <div className={`project-detail-shell ${styles.detailInner}`}>
             <div className={styles.projectIntroduction}>
               <ProjectHeader
                 titleId="hermes-title"
@@ -409,7 +404,7 @@ export default function AiPage() {
               <MediaFigure asset={hermesPrimary} dark className={styles.hermesMedia} />
             </div>
 
-            <div className={styles.projectDevelopment} data-story-type="operations">
+            <div className={`project-detail-body ${styles.projectDevelopment}`} data-story-type="operations">
               <ProjectFocus storyType="operations" message="운영에서 생긴 순서 충돌을 상태·기억·기록의 세 경계로 풀었습니다." />
 
               <section className={styles.hermesStory} data-story-type="hermes" aria-labelledby="hermes-development-title">
@@ -473,7 +468,7 @@ export default function AiPage() {
         </section>
 
         <section id="parking" className={`page-body-section surface-wash ${styles.projectSection}`} aria-labelledby="parking-title">
-          <div className={styles.detailInner}>
+          <div className={`project-detail-shell ${styles.detailInner}`}>
             <div className={styles.projectIntroduction}>
               <ProjectHeader
                 titleId="parking-title"
@@ -495,7 +490,7 @@ export default function AiPage() {
               <MediaFigure asset={parkingPrimary} className={styles.parkingMedia} />
             </div>
 
-            <div className={styles.projectDevelopment} data-story-type="judgment-split">
+            <div className={`project-detail-body ${styles.projectDevelopment}`} data-story-type="judgment-split">
               <ProjectFocus storyType="judgment-split" message="하나의 모델 대신, 판단 단위로 나눴습니다." />
 
               <div className={styles.parkingLead} data-story-type="parking">

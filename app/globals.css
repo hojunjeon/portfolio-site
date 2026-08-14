@@ -18,6 +18,7 @@
   /* 잉크와 텍스트 — #1d1d1f 는 잉크 전용이다. 타일 배경으로 쓰지 않는다. */
   --ink: #1d1d1f;              /* {colors.ink} */
   --ink-80: #333333;           /* {colors.ink-muted-80} — 라이트 표면 본문·보조 */
+  --ink-40: #999999;           /* 상세 레일·보조 구분선 — 다크 표면은 타일 계조를 우선한다 */
   --ink-48: #7a7a7a;           /* {colors.ink-muted-48} — 비활성 전용. 본문 텍스트에 쓰지 않는다(흰 배경 4.29:1) */
   --on-dark: #ffffff;          /* {colors.body-on-dark} */
   --on-dark-muted: #cccccc;    /* {colors.body-muted} */
@@ -84,6 +85,15 @@
   --detail-message: clamp(18px, 1.9vw, 22px);
   --detail-body-size: 16px;
   --detail-meta-size: 13px;
+
+  /* Dense detail rhythm: the shared contract uses only these increments. */
+  --dense-space-4: 4px;
+  --dense-space-8: 8px;
+  --dense-space-12: 12px;
+  --dense-space-16: 16px;
+  --dense-space-24: 24px;
+  --dense-space-32: 32px;
+  --dense-space-48: 48px;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; background: var(--wash); }
@@ -1603,5 +1613,503 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 
   .home-hero-visual { aspect-ratio: 4 / 5; max-height: none; }
   .home-hero-visual figcaption { right: var(--sp-sm); bottom: var(--sp-sm); }
+}
+
+/* ============================================================================
+   Shared detail contract
+   The AI, Robotics, and Autonomous routes keep their local visual modules, but
+   these semantic rails provide one predictable skeleton for the first viewport
+   and for narrow screens.  Keep this layer token-only: no new surfaces,
+   gradients, or shadows belong in the shared shell.
+   ========================================================================== */
+.project-index {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  min-width: 0;
+}
+
+.project-index-item {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.project-detail-shell {
+  display: grid;
+  gap: var(--dense-space-32);
+  min-width: 0;
+}
+
+.project-detail-header {
+  display: grid;
+  grid-template-columns: minmax(48px, 0.1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--dense-space-16);
+  min-width: 0;
+  margin-bottom: var(--dense-space-24);
+}
+
+.project-detail-header > :first-child,
+.project-detail-index {
+  min-width: 0;
+  color: var(--blue-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.project-detail-header h2 {
+  max-width: 48ch;
+  margin-bottom: var(--dense-space-8);
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1.08;
+}
+
+.project-detail-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--dense-space-16);
+  max-width: 900px;
+  min-width: 0;
+  margin: 0;
+}
+
+.project-detail-facts > div {
+  min-width: 0;
+  padding-top: var(--dense-space-12);
+  border-top: 1px solid var(--hairline);
+}
+
+.project-detail-facts :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.project-detail-facts dt {
+  margin-bottom: var(--dense-space-8);
+  color: var(--ink-80);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-detail-facts dd {
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.project-detail-primer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--dense-space-12);
+  max-width: 960px;
+  min-width: 0;
+  margin: 0 0 var(--dense-space-16);
+}
+
+.project-detail-primer > * {
+  min-width: 0;
+  padding-top: var(--dense-space-8);
+  border-top: 1px solid var(--hairline);
+}
+
+.project-detail-primer :is(p, dd) {
+  margin: 0;
+  color: var(--ink-80);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.project-detail-decision {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.3fr) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--dense-space-24);
+  max-width: 1080px;
+  min-width: 0;
+  margin: 0 0 var(--dense-space-32);
+  padding: var(--dense-space-16) 0 var(--dense-space-24);
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.decision-label {
+  display: block;
+  min-width: 0;
+  padding-top: 0.25em;
+  color: var(--blue-deep);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-detail-decision > :last-child {
+  max-width: 32ch;
+  margin: 0;
+  font-size: clamp(20px, 2.8vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+
+.project-detail-body {
+  display: grid;
+  gap: var(--dense-space-24);
+  min-width: 0;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.project-detail-body > * {
+  min-width: 0;
+}
+
+@media screen {
+  :is(.page-body-section):has(> .project-detail-shell) {
+    padding-block: clamp(48px, 5vw, 64px);
+  }
+
+  /* Detail route heroes are intentionally one-column and compact. The visual
+     prop remains supported by PageTitle for other callers, but detail routes
+     do not let an image expand the first viewport. */
+  :is(.route-hero-blue, .route-hero-slate, .route-hero-warm, .route-hero-dark) .page-hero-compact {
+    width: min(calc(100% - (var(--gutter) * 2)), 1120px);
+    min-height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: clamp(40px, 5vw, 56px);
+  }
+
+  :is(.route-hero-blue, .route-hero-slate, .route-hero-warm, .route-hero-dark) .page-hero-compact .page-hero-visual {
+    display: none;
+  }
+
+  /* Keep the desktop nav's keyboard target as usable as the mobile menu. */
+  .desktop-nav a {
+    min-height: 44px;
+  }
+}
+
+@media screen and (max-width: 833px) {
+  .project-detail-header {
+    grid-template-columns: minmax(40px, 0.16fr) minmax(0, 1fr);
+    gap: var(--dense-space-12);
+  }
+
+  .project-detail-decision {
+    grid-template-columns: minmax(96px, 0.34fr) minmax(0, 1fr);
+    gap: var(--dense-space-16);
+  }
+
+  .project-detail-shell {
+    gap: var(--dense-space-24);
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .project-detail-header,
+  .project-detail-facts,
+  .project-detail-primer,
+  .project-detail-decision {
+    grid-template-columns: 1fr;
+  }
+
+  .project-detail-header {
+    gap: var(--dense-space-12);
+    margin-bottom: var(--dense-space-24);
+  }
+
+  .project-detail-facts,
+  .project-detail-primer {
+    gap: var(--dense-space-12);
+  }
+
+  .project-detail-decision {
+    gap: var(--dense-space-8);
+    margin-bottom: var(--dense-space-24);
+    padding-block: var(--dense-space-12) var(--dense-space-16);
+  }
+
+  .project-detail-body {
+    gap: var(--dense-space-16);
+  }
+}
+
+@media screen and (max-width: 419px) {
+  .project-detail-shell {
+    gap: var(--dense-space-16);
+  }
+
+  .project-detail-header h2 {
+    font-size: 24px;
+  }
+
+  .project-detail-decision > :last-child {
+    font-size: 20px;
+  }
+}
+
+/* ============================================================================
+   Shared project rails
+   Route modules keep their typography and story-specific visuals, but the
+   overview rows and detail scaffolding use one structural contract.  The
+   body-qualified selectors intentionally outrank route-module grid rules;
+   otherwise the same semantic row computes to a different number of tracks
+   on each route.
+   ========================================================================== */
+@media screen {
+  /* Keep the colored section full-bleed while the semantic content rail stays
+     the same 1120px measure on every project route. */
+  body .page-body-section.project-index > :first-child,
+  body .project-detail-shell {
+    width: min(calc(100% - (var(--gutter) * 2)), 1120px);
+    max-width: 1120px;
+    margin-inline: auto;
+  }
+
+  body .page-body-section.project-index > :first-child > .project-index,
+  body .page-body-section.project-index > .project-index {
+    width: 100%;
+    max-width: 1120px;
+    margin-inline: auto;
+  }
+
+  body .project-index .project-index-item {
+    display: grid;
+    grid-template-columns: minmax(52px, 0.13fr) minmax(220px, 0.82fr) minmax(0, 1.45fr) minmax(88px, auto);
+    gap: var(--dense-space-24);
+    align-items: start;
+    min-width: 0;
+  }
+
+  body .project-index .project-index-item > :is(:nth-child(1), :nth-child(2), :nth-child(3), :nth-child(4)) {
+    min-width: 0;
+  }
+
+  body .project-index .project-index-item > :nth-child(3) {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  body .project-index .project-index-item > :nth-child(4) {
+    min-height: 44px;
+  }
+
+  /* Detail scaffolding: the same rails for AI, Robotics, and Autonomous. */
+  body .project-detail-shell {
+    display: grid;
+    gap: var(--dense-space-32);
+    min-width: 0;
+  }
+
+  body .project-detail-header {
+    display: grid;
+    grid-template-columns: minmax(48px, 0.1fr) minmax(0, 1fr);
+    gap: var(--dense-space-16);
+    align-items: start;
+    min-width: 0;
+    margin-bottom: var(--dense-space-24);
+  }
+
+  /* Route modules may add a two-class selector (for example Robotics' dense
+     header). Keep the shared contract one specificity step above those local
+     composition rules. */
+  body .project-detail-shell .project-detail-header {
+    grid-template-columns: minmax(48px, 0.1fr) minmax(0, 1fr);
+    gap: var(--dense-space-16);
+    margin-bottom: var(--dense-space-24);
+  }
+
+  body .project-detail-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--dense-space-16);
+    max-width: 900px;
+    min-width: 0;
+    margin: 0;
+  }
+
+  body .project-detail-shell .project-detail-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--dense-space-16);
+    max-width: 900px;
+    margin: 0;
+  }
+
+  body .project-detail-primer {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--dense-space-12);
+    max-width: 960px;
+    min-width: 0;
+    margin: 0 0 var(--dense-space-16);
+  }
+
+  body .project-detail-shell .project-detail-primer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--dense-space-12);
+    width: min(100%, 960px);
+    max-width: 960px;
+    margin: 0 0 var(--dense-space-16);
+  }
+
+  body .project-detail-decision {
+    display: grid;
+    grid-template-columns: minmax(120px, 0.3fr) minmax(0, 1fr);
+    gap: var(--dense-space-24);
+    align-items: start;
+    max-width: 1080px;
+    min-width: 0;
+    margin: 0 0 var(--dense-space-32);
+    padding: var(--dense-space-16) 0 var(--dense-space-24);
+  }
+
+  body .project-detail-shell .project-detail-decision {
+    grid-template-columns: minmax(120px, 0.3fr) minmax(0, 1fr);
+    gap: var(--dense-space-24);
+    width: min(100%, 1080px);
+    max-width: 1080px;
+    margin: 0 0 var(--dense-space-32);
+    padding: var(--dense-space-16) 0 var(--dense-space-24);
+  }
+
+  body .project-detail-body {
+    display: grid;
+    gap: var(--dense-space-24);
+    min-width: 0;
+  }
+}
+
+@media screen and (max-width: 833px) {
+  body .project-index .project-index-item {
+    grid-template-columns: minmax(44px, 0.16fr) minmax(0, 1fr) minmax(88px, auto);
+    gap: var(--dense-space-16);
+  }
+
+  body .project-index .project-index-item > :nth-child(3) {
+    grid-column: 2 / -1;
+  }
+
+  body .project-detail-header {
+    grid-template-columns: minmax(40px, 0.16fr) minmax(0, 1fr);
+    gap: var(--dense-space-12);
+  }
+
+  body .project-detail-shell .project-detail-header {
+    grid-template-columns: minmax(40px, 0.16fr) minmax(0, 1fr);
+    gap: var(--dense-space-12);
+    margin-bottom: var(--dense-space-24);
+  }
+
+  body .project-detail-decision {
+    grid-template-columns: minmax(96px, 0.34fr) minmax(0, 1fr);
+    gap: var(--dense-space-16);
+  }
+
+  body .project-detail-shell .project-detail-decision {
+    grid-template-columns: minmax(96px, 0.34fr) minmax(0, 1fr);
+    gap: var(--dense-space-16);
+  }
+}
+
+@media screen and (min-width: 641px) and (max-width: 833px) {
+  body .project-index .project-index-item > :nth-child(3) {
+    grid-column: 2 / 4;
+    grid-row: 2;
+  }
+
+  body .project-index .project-index-item > :nth-child(4) {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  body .project-index .project-index-item {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: var(--dense-space-12);
+  }
+
+  body .project-index .project-index-item > :is(:nth-child(3), :nth-child(4)) {
+    grid-column: 2;
+  }
+
+  body .project-detail-header,
+  body .project-detail-facts,
+  body .project-detail-primer,
+  body .project-detail-decision {
+    grid-template-columns: 1fr;
+  }
+
+  body .project-detail-shell .project-detail-header,
+  body .project-detail-shell .project-detail-facts,
+  body .project-detail-shell .project-detail-primer,
+  body .project-detail-shell .project-detail-decision {
+    grid-template-columns: 1fr;
+  }
+
+  body .project-detail-header {
+    gap: var(--dense-space-12);
+    margin-bottom: var(--dense-space-24);
+  }
+
+  body .project-detail-facts,
+  body .project-detail-primer {
+    gap: var(--dense-space-12);
+  }
+
+  body .project-detail-decision {
+    gap: var(--dense-space-8);
+    margin-bottom: var(--dense-space-24);
+    padding-block: var(--dense-space-12) var(--dense-space-16);
+  }
+
+  body .project-detail-body {
+    gap: var(--dense-space-16);
+  }
+}
+
+/* First-viewport compact contract: the overview is a readable index, not a
+   second hero. Keep the same short rail on every detail route. */
+@media screen {
+  body :is(.route-hero-blue, .route-hero-slate, .route-hero-warm, .route-hero-dark) .page-hero-compact {
+    padding-block: 32px;
+  }
+
+  body :is(.route-hero-blue, .route-hero-slate, .route-hero-warm, .route-hero-dark) .page-hero-compact .action-row {
+    margin-top: 16px;
+  }
+
+  body .page-body-section.project-index {
+    padding-block: 32px;
+  }
+
+  body .project-index .project-index-item {
+    gap: var(--dense-space-16);
+    padding-block: 16px;
+  }
+
+  body .project-index .project-index-item > :nth-child(3) {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  /* The route modules keep overview labels local; these structural hooks keep
+     their metadata below the 16px body rail without coupling globals to a
+     generated CSS-module name. */
+  body .project-index .project-index-item > :nth-child(2) p {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  body .project-index :is(.overviewType, .overviewMeta, .overviewKeywords) {
+    font-size: 13px;
+    line-height: 1.4;
+  }
 }
 
