@@ -157,7 +157,7 @@ a:hover { text-decoration-thickness: 2px; }
   font-size: 12px; line-height: 1; letter-spacing: -0.12px;
 }
 .desktop-nav a {
-  display: inline-flex; align-items: center; min-height: 32px; padding: 10px 12px;
+  display: inline-flex; align-items: center; min-height: 32px; min-inline-size: 44px; padding: 10px 12px;
   color: var(--on-dark-muted); text-decoration: none;
 }
 /* 활성 표시는 텍스트 색만. 배경 pill·밑줄·점을 쓰지 않는다. */
@@ -175,7 +175,7 @@ a:hover { text-decoration-thickness: 2px; }
   background: var(--tile-1); border-radius: var(--r-sm);
 }
 .mobile-nav nav a {
-  display: flex; align-items: center; min-height: 44px; padding: var(--sp-xs) var(--sp-sm);
+  display: flex; align-items: center; min-height: 44px; min-inline-size: 44px; padding: var(--sp-xs) var(--sp-sm);
   color: var(--on-dark-muted); text-decoration: none;
   font-size: 14px; line-height: 1.29; letter-spacing: -0.224px;
 }
@@ -1175,7 +1175,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 .footer-copy { margin: 0; color: var(--ink-80); font-size: 12px; line-height: 1.3; letter-spacing: -0.12px; }
 .footer-nav { display: flex; flex-wrap: wrap; justify-content: end; gap: 2px; font-size: 17px; line-height: 2.41; letter-spacing: 0; }
 .footer-nav a {
-  display: inline-flex; align-items: center; min-height: 44px; padding: var(--sp-xs) var(--sp-sm);
+  display: inline-flex; align-items: center; min-height: 44px; min-inline-size: 44px; padding: var(--sp-xs) var(--sp-sm);
   color: var(--blue); text-decoration: none;
 }
 .footer-nav a[aria-current="page"] { color: var(--ink); }

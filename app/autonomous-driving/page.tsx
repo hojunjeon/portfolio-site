@@ -1,5 +1,4 @@
-import type { ReactNode } from "react";
-
+import { ProjectDetailLayout } from "../components/ProjectDetailLayout";
 import { PageFooter, PageTitle, SiteChrome } from "../components/SiteChrome";
 import styles from "./page.module.css";
 
@@ -9,42 +8,12 @@ export const metadata = {
     "점자블록 손상 탐지 E2E 서비스, 어린이용 전동차 개조 차량의 미션 주행, ROS2·Gazebo 진단 순서를 프로젝트별 흐름으로 정리했습니다.",
 };
 
-type MediaAsset = {
-  src: string;
-  alt: string;
-};
-
-type PrimerContent = {
-  context: string;
-  flow: string;
-};
-
 type ProjectOverview = {
   index: string;
   title: string;
   type: string;
   message: string;
   href: string;
-};
-
-type ProjectDetailProps = {
-  id: string;
-  titleId: string;
-  index: string;
-  eyebrow: string;
-  title: string;
-  summary: string;
-  message: string;
-  period?: string;
-  form: string;
-  roleText: string;
-  primer: PrimerContent;
-  surface: string;
-  dark?: boolean;
-  primary: ReactNode;
-  body: ReactNode;
-  visual?: ReactNode;
-  keywords: string[];
 };
 
 const projectOverviews: ProjectOverview[] = [
@@ -73,7 +42,7 @@ const projectOverviews: ProjectOverview[] = [
 
 function OverviewList({ projects }: { projects: ProjectOverview[] }) {
   return (
-    <ol className={styles.overviewList} aria-label="Autonomous 프로젝트 목록">
+    <ol className={`project-index ${styles.overviewList}`} aria-label="Autonomous 프로젝트 목록">
       {projects.map((project) => (
         <li className={`project-index-item ${styles.overviewItem}`} key={project.index}>
           <span className={styles.overviewIndex}>{project.index}</span>
@@ -88,17 +57,6 @@ function OverviewList({ projects }: { projects: ProjectOverview[] }) {
         </li>
       ))}
     </ol>
-  );
-}
-
-function MediaSlot({ primary, dark = false, caption }: { primary: MediaAsset; dark?: boolean; caption: string }) {
-  return (
-    <figure className={`${styles.primaryArtifact}${dark ? ` ${styles.primaryArtifactDark}` : ""}`}>
-      <div className={styles.mediaViewport}>
-        <img className={styles.mediaImage} src={primary.src} alt={primary.alt} loading="lazy" decoding="async" />
-      </div>
-      <figcaption>{caption}</figcaption>
-    </figure>
   );
 }
 
@@ -168,94 +126,6 @@ function EnvironmentFigure() {
       </div>
       <figcaption>Docker → node/namespace → 시나리오 단위 검증</figcaption>
     </figure>
-  );
-}
-
-function ProjectPrimer({ content, dark = false }: { content: PrimerContent; dark?: boolean }) {
-  return (
-    <aside className={`project-detail-primer ${styles.projectPrimer}${dark ? ` ${styles.projectPrimerDark}` : ""}`} aria-label="프로젝트 맥락">
-      <div className={styles.primerBlock}>
-        <span className={styles.primerLabel}>사용 맥락</span>
-        <p>{content.context}</p>
-      </div>
-      <div className={styles.primerBlock}>
-        <span className={styles.primerLabel}>동작 흐름</span>
-        <p>{content.flow}</p>
-      </div>
-    </aside>
-  );
-}
-
-function ProjectFacts({ period, form, roleText }: { period?: string; form: string; roleText: string }) {
-  return (
-    <dl className={`project-detail-facts ${styles.projectFacts}`}>
-      {period ? (
-        <div>
-          <dt>기간</dt>
-          <dd>{period}</dd>
-        </div>
-      ) : null}
-      <div>
-        <dt>형태</dt>
-        <dd>{form}</dd>
-      </div>
-      <div>
-        <dt>역할</dt>
-        <dd>{roleText}</dd>
-      </div>
-    </dl>
-  );
-}
-
-function ProjectDetail({
-  id,
-  titleId,
-  index,
-  eyebrow,
-  title,
-  summary,
-  message,
-  period,
-  form,
-  roleText,
-  primer,
-  surface,
-  dark = false,
-  primary,
-  body,
-  visual,
-  keywords,
-}: ProjectDetailProps) {
-  return (
-    <section id={id} className={`page-body-section ${surface} ${styles.detailSection}${dark ? ` ${styles.darkSurface}` : ""}`} aria-labelledby={titleId}>
-      <div className={`project-detail-shell ${styles.detailInner}`}>
-        <header className={`project-detail-header ${styles.projectHeader}`}>
-          <div className={styles.projectNumber} aria-hidden="true">{index}</div>
-          <div className={styles.projectHeading}>
-            <p className="eyebrow">{eyebrow}</p>
-            <h2 id={titleId}>{title}</h2>
-            <p className={styles.projectSummary}>{summary}</p>
-            <ProjectFacts period={period} form={form} roleText={roleText} />
-          </div>
-        </header>
-
-        <ProjectPrimer content={primer} dark={dark} />
-        <div className={styles.primaryVisual}>{primary}</div>
-
-        <div className={`project-detail-body ${styles.projectDevelopment}`}>
-          <div className={`project-detail-decision ${styles.projectFocus}`}>
-            <span className={`decision-label ${styles.sectionTag}`}>전개 · 핵심 판단</span>
-            <p className={styles.projectMessage}>{message}</p>
-          </div>
-          <div className={styles.projectBody}>{body}</div>
-          {visual ? <div className={styles.visualGrid}>{visual}</div> : null}
-          <p className={styles.keywordLine} aria-label={`${title} 기술 키워드`}>
-            <span>도구</span>
-            {keywords.join(" · ")}
-          </p>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -354,92 +224,85 @@ export default function AutonomousDrivingPage() {
           </div>
         </section>
 
-        <ProjectDetail
+        <ProjectDetailLayout
           id="patrol-robot"
           titleId="patrol-robot-title"
           index="01"
           eyebrow="01 / 걸음걸음 · 개발 단계형"
           title="걸음걸음 — 점자블록 주행 로봇"
           summary="점자 블록 손상으로 인해 생기는 어려움을 해결하는 자율주행 점자블록 손상 탐지 E2E 서비스"
-          message="일반 보도블록 구간도 달려야 해서 일반 보도블록 주행 모드를 추가하고 점자블록 주행 모드와 라우팅했습니다."
-          period="2026.07–08"
-          form="SSAFY 공통 프로젝트(팀)"
-          roleText="팀장 · HW/제어·ROS2 통합"
+          facts={{
+            period: "2026.07–08",
+            form: "SSAFY 공통 프로젝트(팀)",
+            role: "팀장 · HW/제어·ROS2 통합",
+          }}
           primer={{
             context: "점자 블록 손상으로 인해 문제를 겪는 시각 장애인과 지자체 유지보수 관리자를 돕기 위한 자율주행 로봇",
             flow: "정해진 순찰 루트 자율주행→점자블록 이미지 촬영→서버 VLM 손상 판독→관리자용 대시보드 데이터.",
           }}
           surface="surface-pearl"
-          primary={
-            <MediaSlot
-              primary={{
-                src: "/evidence/autonomous/ggeolgeol/ggeolgeol-driving-8x.gif",
-                alt: "걸음걸음 로봇이 점자블록 옆을 주행하는 실제 주행 기록 GIF",
-              }}
-              caption="실제 주행 기록 · 점자블록 옆으로 offset 경로를 유지하는 순찰"
-            />
-          }
+          primary={{
+            src: "/evidence/autonomous/ggeolgeol/ggeolgeol-driving-8x.gif",
+            alt: "걸음걸음 로봇이 점자블록 옆을 주행하는 실제 주행 기록 GIF",
+            caption: "실제 주행 기록 · 점자블록 옆으로 offset 경로를 유지하는 순찰",
+          }}
+          decision="일반 보도블록 구간도 달려야 해서 일반 보도블록 주행 모드를 추가하고 점자블록 주행 모드와 라우팅했습니다."
           body={<PatrolBody />}
           visual={<PatrolModes />}
           keywords={["ROS 2", "Python", "OpenCV", "Camera geometry", "Offset path", "Safety target", "Static contract"]}
         />
 
-        <ProjectDetail
+        <ProjectDetailLayout
           id="competition"
           titleId="competition-title"
           index="02"
           eyebrow="02 / 자율주행 SW 경진대회 · 역할 경계형"
           title="제3회 미래형자동차 자율주행 SW 경진대회"
           summary="어린이용 전동차를 개조한 Camera/LiDAR 차량이 실내 모사 트랙에서 주행·미션을 수행하는 경진대회"
-          message="인식 결과가 속도·조향 명령으로 넘어가는 제어 경계를 맡았습니다."
-          period="2024.05–08"
-          form="제3회 미래형자동차 자율주행 SW 경진대회 · Team Tino(한국공학대)"
-          roleText="속도·조향 제어"
+          facts={{
+            period: "2024.05–08",
+            form: "제3회 미래형자동차 자율주행 SW 경진대회 · Team Tino(한국공학대)",
+            role: "속도·조향 제어",
+          }}
           primer={{
             context: "어린이용 전동차를 개조한 카메라·LiDAR 차량으로 실내 모사 트랙의 주행·미션을 수행하는 대회입니다.",
             flow: "카메라와 LiDAR 정보를 받아 속도와 조향 값을 정하고, 차량 명령으로 넘기는 역할입니다.",
           }}
           surface="surface-dark"
           dark
-          primary={
-            <MediaSlot
-              dark
-              primary={{
-                src: "/evidence/autonomous/competition/futurecar-2024-official.png",
-                alt: "제3회 미래형자동차 자율주행 SW 경진대회 공식 포스터",
-              }}
-              caption="공식 대회 포스터 · 센서 인식이 차량 제어로 넘어가는 경계"
-            />
-          }
+          primary={{
+            src: "/evidence/autonomous/competition/futurecar-2024-official.png",
+            alt: "제3회 미래형자동차 자율주행 SW 경진대회 공식 포스터",
+            caption: "공식 대회 포스터 · 센서 인식이 차량 제어로 넘어가는 경계",
+          }}
+          decision="인식 결과가 속도·조향 명령으로 넘어가는 제어 경계를 맡았습니다."
           body={<CompetitionBody />}
           keywords={["ROS", "OpenCV", "LiDAR", "초음파 센서", "Camera"]}
         />
 
-        <ProjectDetail
+        <ProjectDetailLayout
           id="ros2-simulation"
           titleId="ros2-simulation-title"
           index="03"
           eyebrow="03 / ROS2 + Gazebo · 트러블슈팅형"
           title="ROS2 + Gazebo 자율주행 시뮬레이션"
           summary="ROS2 Foxy·Gazebo Classic에서 차선·신호·표지판·보행자 시나리오를 통합하고 차간거리 분기를 조정 중인 자율주행 시뮬레이션"
-          message="증상과 원인을 분리한 뒤 환경 고정·node/namespace 분리·시나리오 단위 검증의 순서로 원인을 좁혔습니다."
-          period="2025.07–08"
-          form="팀 프로젝트(앨리스 자율주행 트랙)"
-          roleText="통합 제어 알고리즘·ROS2 노드 아키텍처"
+          facts={{
+            period: "2025.07–08",
+            form: "팀 프로젝트(앨리스 자율주행 트랙)",
+            role: "통합 제어 알고리즘·ROS2 노드 아키텍처",
+          }}
           primer={{
             context: "Ubuntu 20.04 Docker에서 Gazebo 시나리오를 돌리며 원인을 나누는 작업입니다.",
             flow: "카메라·LiDAR와 주변 상황을 기능별 노드로 나누고, Drive_Bot이 Ackermann 명령으로 움직이도록 연결합니다.",
           }}
           surface="surface-wash"
-          primary={
-            <MediaSlot
-              primary={{
-                src: "/evidence/autonomous/ros2/ros2-gazebo.png",
-                alt: "ROS2와 Gazebo 자율주행 시나리오 이미지",
-              }}
-              caption="ROS2 + Gazebo 실행 화면 · 증상을 환경과 시나리오 단위로 분해"
-            />
-          }
+          primary={{
+            src: "/evidence/autonomous/ros2/ros2-gazebo.png",
+            alt: "ROS2와 Gazebo 자율주행 시나리오 이미지",
+            caption: "ROS2 + Gazebo 실행 화면 · 증상을 환경과 시나리오 단위로 분해",
+          }}
+          decision="증상과 원인을 분리한 뒤 환경 고정·node/namespace 분리·시나리오 단위 검증의 순서로 원인을 좁혔습니다."
           body={<SimulationBody />}
           visual={<EnvironmentFigure />}
           keywords={["ROS2 Foxy", "Gazebo Classic", "Ubuntu 20.04", "Docker", "Python", "C++", "LiDAR", "PID", "Ackermann"]}

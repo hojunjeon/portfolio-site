@@ -1,0 +1,439 @@
+.root {
+  --detail-index-col: clamp(48px, 8vw, 112px);
+  --detail-gap: clamp(16px, 3vw, 40px);
+  --detail-content-gap: clamp(16px, 2.4vw, 28px);
+  min-width: 0;
+}
+
+.root:global(.unified-project-detail) {
+  padding-block: clamp(48px, 5vw, 64px);
+}
+
+.root.dark {
+  color: var(--on-dark);
+  background: var(--tile-1);
+}
+
+.root.dark :global(.project-intro-box) {
+  background: var(--tile-1);
+  border-color: var(--tile-3);
+}
+
+/* Local hooks keep the generated markup explicit while the visual contract
+   remains scoped through the root + semantic global class selectors below. */
+.shell,
+.introBox,
+.header,
+.index,
+.facts,
+.primer,
+.primary,
+.body,
+.decision,
+.story,
+.visual,
+.keywords,
+.links {
+  min-width: 0;
+}
+
+.root :global(.project-detail-shell) {
+  width: min(calc(100% - (var(--gutter) * 2)), 1120px);
+  min-width: 0;
+  margin-inline: auto;
+  display: grid;
+  gap: var(--detail-gap);
+}
+
+.root :global(.project-intro-box) {
+  display: grid;
+  gap: var(--detail-content-gap);
+  min-width: 0;
+  padding: clamp(16px, 3vw, 32px);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+}
+
+.root :global(.project-detail-header) {
+  display: grid;
+  grid-template-columns: var(--detail-index-col) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--detail-gap);
+  min-width: 0;
+  margin: 0;
+}
+
+.root :global(.project-detail-index) {
+  min-width: 0;
+  color: var(--blue-deep);
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.root .heading {
+  min-width: 0;
+}
+
+.root :global(.project-detail-header) h2 {
+  max-width: 48ch;
+  margin-bottom: 8px;
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.root .summary {
+  max-width: 760px;
+  margin: 0 0 var(--detail-content-gap);
+  color: var(--ink-80);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.root :global(.project-detail-facts) {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--detail-content-gap);
+  min-width: 0;
+  max-width: 900px;
+  margin: 0;
+}
+
+.root :global(.project-detail-facts) > div {
+  min-width: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--hairline);
+}
+
+.root :global(.project-detail-facts) :is(dt, dd) {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.root :global(.project-detail-facts) dt {
+  margin-bottom: 8px;
+  color: var(--ink-80);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.root :global(.project-detail-facts) dd {
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.root :global(.project-detail-primer),
+.root :global(.project-detail-primary) {
+  width: calc(100% - var(--detail-index-col) - var(--detail-gap));
+  margin-inline-start: calc(var(--detail-index-col) + var(--detail-gap));
+  min-width: 0;
+}
+
+.root :global(.project-detail-primer) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--detail-content-gap);
+  margin-block: 0;
+}
+
+.root :global(.project-detail-primer) > div {
+  min-width: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--hairline);
+}
+
+.root .primerLabel {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--blue-deep);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+}
+
+.root :global(.project-detail-primer) p {
+  min-width: 0;
+  margin: 0;
+  color: var(--ink-80);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.root :global(.project-detail-primary) {
+  margin-block: 0;
+  overflow: hidden;
+}
+
+.root :global(.project-detail-primary) img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.root :global(.project-detail-primary) figcaption {
+  margin-top: 8px;
+  color: var(--ink-80);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.root :global(.project-detail-body) {
+  display: grid;
+  gap: var(--detail-content-gap);
+  min-width: 0;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.root :global(.project-detail-decision) {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.3fr) minmax(0, 1fr);
+  gap: var(--detail-gap);
+  align-items: start;
+  min-width: 0;
+  margin: 0;
+  padding: 16px 0 24px;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.root :global(.decision-label) {
+  display: block;
+  min-width: 0;
+  padding-top: 0.25em;
+  color: var(--blue-deep);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.root :global(.project-detail-decision) > p {
+  max-width: 32ch;
+  margin: 0;
+  font-size: clamp(20px, 2.8vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+
+.root :global(.project-story),
+.root :global(.project-visual),
+.root :global(.project-links),
+.root :global(.project-keywords) {
+  min-width: 0;
+}
+
+.root :global(.project-story) {
+  max-width: 72ch;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.root :global(.project-story) > :first-child {
+  margin-top: 0;
+}
+
+.root :global(.project-story) > :last-child {
+  margin-bottom: 0;
+}
+
+.root :global(.project-visual) > :first-child {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.root :global(.project-keywords) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-80);
+  font-size: 14px;
+  line-height: 1.43;
+}
+
+.root :global(.project-keywords) li {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.root :global(.project-links) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.root :global(.project-links) a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--blue);
+  text-underline-offset: 3px;
+}
+
+/*
+ * The legacy global rail rules intentionally qualify these selectors with
+ * `body`.  Keep the shared component's intro grid as the final authority by
+ * qualifying it with the unique root + unified wrapper as well.  A two-track
+ * intro box gives the header index/text pair and its primer/media siblings
+ * one physical content column without route-specific offsets.
+ */
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  :global(.project-intro-box) {
+  grid-template-columns: minmax(48px, 0.1fr) minmax(0, 1fr);
+  column-gap: var(--dense-space-16);
+}
+
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  :global(.project-intro-box)
+  > :global(.project-detail-header) {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(48px, 0.1fr) minmax(0, 1fr);
+  gap: var(--dense-space-16);
+}
+
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  :global(.project-intro-box)
+  > :is(:global(.project-detail-primer), :global(.project-detail-primary)) {
+  grid-column: 2;
+  width: auto;
+  max-width: none;
+  margin-inline: 0;
+}
+
+.root:global(.surface-dark),
+.root:global(.surface-dark) :global(.project-intro-box) {
+  color: var(--on-dark);
+  background: var(--tile-1);
+}
+
+.root:global(.surface-dark) :global(.project-intro-box) {
+  border-color: var(--tile-3);
+}
+
+.root:global(.surface-dark) .summary,
+.root:global(.surface-dark) :global(.project-detail-facts) dt,
+.root:global(.surface-dark) :global(.project-detail-primer) p,
+.root:global(.surface-dark) :global(.project-detail-primary) figcaption,
+.root:global(.surface-dark) :global(.project-keywords) {
+  color: var(--on-dark-muted);
+}
+
+.root:global(.surface-dark) .primerLabel,
+.root:global(.surface-dark) :global(.decision-label) {
+  color: var(--blue-on-dark);
+}
+
+.root:global(.surface-dark) :global(.project-detail-facts) > div,
+.root:global(.surface-dark) :global(.project-detail-primer) > div {
+  border-top-color: var(--tile-3);
+}
+
+.root:global(.surface-dark) :global(.project-detail-decision) {
+  border-bottom-color: var(--tile-3);
+}
+
+@media (max-width: 640px) {
+  .root {
+    --detail-index-col: 1fr;
+    --detail-gap: 16px;
+  }
+
+  .root :global(.project-detail-shell) {
+    gap: 24px;
+  }
+
+  .root :global(.project-intro-box) {
+    gap: 24px;
+    padding: 16px;
+  }
+
+  .root :global(.project-detail-header),
+  .root :global(.project-detail-facts),
+  .root :global(.project-detail-primer),
+  .root :global(.project-detail-decision) {
+    grid-template-columns: 1fr;
+  }
+
+  .root :global(.project-detail-header) {
+    gap: 12px;
+  }
+
+  .root :global(.project-detail-primer),
+  .root :global(.project-detail-primary) {
+    width: 100%;
+    margin-inline-start: 0;
+  }
+
+  .root :global(.project-detail-facts),
+  .root :global(.project-detail-primer) {
+    gap: 12px;
+  }
+
+  .root :global(.project-detail-decision) {
+    gap: 8px;
+    padding-block: 12px 16px;
+  }
+
+  .root.root:global(.unified-project-detail)
+    :global(.project-detail-shell)
+    :global(.project-intro-box) {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+
+  .root.root:global(.unified-project-detail)
+    :global(.project-detail-shell)
+    :global(.project-intro-box)
+    > :is(
+      :global(.project-detail-header),
+      :global(.project-detail-primer),
+      :global(.project-detail-primary)
+    ) {
+    grid-column: 1;
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+  }
+
+  /* The desktop unified header rule is intentionally more specific than the
+     legacy body rail. Repeat its specificity here so mobile really becomes a
+     one-column stack instead of retaining the index/text split. */
+  .root.root:global(.unified-project-detail)
+    :global(.project-detail-shell)
+    :global(.project-intro-box)
+    > :global(.project-detail-header) {
+    grid-column: 1;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root :global(.project-links) a {
+    transition: none;
+  }
+}
