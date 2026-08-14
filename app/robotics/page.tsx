@@ -12,46 +12,40 @@ export const metadata = {
 
 type ProjectOverview = {
   index: string;
+  type: string;
   title: string;
-  meta: string;
   message: string;
-  keywords: string;
   href: string;
 };
 
 const projectOverviews: ProjectOverview[] = [
   {
     index: "01",
+    type: "트러블슈팅형",
     title: "사과 수확·분류 로봇",
-    meta: "2023.07–2024.07 · 학부 졸업작품(팀) · 담당: 제어·HW/SW 통합",
     message: "사과 인식부터 로봇팔 구동과 무게 분류까지 연결한 Edge 로봇",
-    keywords: "YOLOv5 · RealSense D415 · 제어 주기",
     href: "#apple-robot",
   },
   {
     index: "02",
+    type: "운영 고도화형",
     title: "로봇팔 강화학습",
-    meta: "개인 프로젝트 · RARL·RobotRF · 실험 설계·오케스트레이션",
     message: "MuJoCo 학습·평가와 checkpoint 검토를 묶은 강화학습 실험 체계",
-    keywords: "MuJoCo · SAC · HER",
     href: "#rl-orchestration",
   },
 ];
 
 function OverviewCard({ project }: { project: ProjectOverview }) {
   return (
-    <article className={`project-index-item ${styles.overviewEntry}`}>
-      <div className={styles.overviewIndex} aria-hidden="true">{project.index}</div>
-      <div className={styles.overviewEntryBody}>
-        <div className={styles.overviewEntryHeading}>
-          <h2>{project.title}</h2>
-        </div>
-        <p className={styles.overviewMeta}>{project.meta}</p>
-        <p className={styles.overviewKeywords}>{project.keywords}</p>
+    <article className="project-index-item project-index-card">
+      <span className="project-index-number" aria-hidden="true">{project.index}</span>
+      <div className="project-index-copy">
+        <p className="project-index-type">{project.type}</p>
+        <h2>{project.title}</h2>
       </div>
-      <p className={styles.overviewMessage}>{project.message}</p>
-      <a className="related-link" href={project.href} aria-label={`${project.title} 프로젝트 보기`}>
-        프로젝트 보기 <span aria-hidden="true">↓</span>
+      <p className="project-index-message">{project.message}</p>
+      <a className="project-index-link" href={project.href} aria-label={`${project.title} 프로젝트 보기`}>
+        보기 <span aria-hidden="true">↓</span>
       </a>
     </article>
   );
@@ -272,16 +266,16 @@ export default function RoboticsPage() {
             lede="사과 수확·분류 Edge AI 로봇과 로봇팔 강화학습 오케스트레이션에서 인식·제어·실험의 경계를 다르게 설계한 과정을 보여줍니다."
           >
             <div className="action-row">
-              <a className="button button-primary" href="#project-overview">
+              <a className="button button-primary" href="#projects-overview">
                 프로젝트 목록 보기 <span aria-hidden="true">↓</span>
               </a>
             </div>
           </PageTitle>
         </div>
 
-        <section id="project-overview" className={`page-body-section surface-wash project-index ${styles.overviewSection}`} aria-label="Robotics 프로젝트 목록">
+        <section id="projects-overview" className={`page-body-section surface-wash project-index project-index-section ${styles.overviewSection}`} aria-label="Robotics 프로젝트 목록">
           <div>
-            <div className={`project-index ${styles.overviewGrid}`}>
+            <div className="project-index">
               {projectOverviews.map((project) => <OverviewCard key={project.index} project={project} />)}
             </div>
           </div>

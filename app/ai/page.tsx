@@ -79,14 +79,14 @@ const pathfinderFlow: MediaAsset = {
 
 function OverviewItem({ project }: { project: ProjectOverview }) {
   return (
-    <article className={`project-index-item ${styles.overviewItem}`}>
-      <span className={styles.overviewIndex} aria-hidden="true">{project.index}</span>
-      <div className={styles.overviewItemBody}>
-        <p className={styles.overviewType}>{project.type}</p>
+    <article className={`project-index-item project-index-card ${styles.overviewItem}`}>
+      <span className={`project-index-number ${styles.overviewIndex}`} aria-hidden="true">{project.index}</span>
+      <div className={`project-index-copy ${styles.overviewItemBody}`}>
+        <p className={`project-index-type ${styles.overviewType}`}>{project.type}</p>
         <h2>{project.title}</h2>
       </div>
-      <p className={styles.overviewMessage}>{project.message}</p>
-      <a className={styles.overviewLink} href={project.href} aria-label={`${project.title} 프로젝트 보기`}>
+      <p className={`project-index-message ${styles.overviewMessage}`}>{project.message}</p>
+      <a className={`project-index-link ${styles.overviewLink}`} href={project.href} aria-label={`${project.title} 프로젝트 보기`}>
         보기 <span aria-hidden="true">↓</span>
       </a>
     </article>
@@ -140,7 +140,7 @@ export default function AiPage() {
           </PageTitle>
         </div>
 
-        <section id="projects-overview" className={`page-body-section surface-wash project-index ${styles.overviewSection}`} aria-label="AI 프로젝트 목록">
+        <section id="projects-overview" className={`page-body-section surface-wash project-index project-index-section ${styles.overviewSection}`} aria-label="AI 프로젝트 목록">
           <div>
             <div className="project-index">
               {projectOverviews.map((project) => <OverviewItem key={project.index} project={project} />)}

@@ -42,21 +42,21 @@ const projectOverviews: ProjectOverview[] = [
 
 function OverviewList({ projects }: { projects: ProjectOverview[] }) {
   return (
-    <ol className={`project-index ${styles.overviewList}`} aria-label="Autonomous 프로젝트 목록">
+    <div className="project-index">
       {projects.map((project) => (
-        <li className={`project-index-item ${styles.overviewItem}`} key={project.index}>
-          <span className={styles.overviewIndex}>{project.index}</span>
-          <div className={styles.overviewTitleBlock}>
-            <span className={styles.overviewType}>{project.type}</span>
+        <article className={`project-index-item project-index-card ${styles.overviewItem}`} key={project.index}>
+          <span className={`project-index-number ${styles.overviewIndex}`} aria-hidden="true">{project.index}</span>
+          <div className={`project-index-copy ${styles.overviewTitleBlock}`}>
+            <span className={`project-index-type ${styles.overviewType}`}>{project.type}</span>
             <h2>{project.title}</h2>
           </div>
-          <p className={styles.overviewMessage}>{project.message}</p>
-          <a className={styles.overviewLink} href={project.href} aria-label={`${project.title} 프로젝트 보기`}>
+          <p className={`project-index-message ${styles.overviewMessage}`}>{project.message}</p>
+          <a className={`project-index-link ${styles.overviewLink}`} href={project.href} aria-label={`${project.title} 프로젝트 보기`}>
             보기 <span aria-hidden="true">↓</span>
           </a>
-        </li>
+        </article>
       ))}
-    </ol>
+    </div>
   );
 }
 
@@ -207,7 +207,7 @@ export default function AutonomousDrivingPage() {
             lede="모드 라우팅, 차량 제어 역할, 실행 환경 고정이라는 서로 다른 판단을 프로젝트별 흐름으로 보여줍니다."
           >
             <div className="action-row">
-              <a className="button button-primary" href="#project-overview">
+              <a className="button button-primary" href="#projects-overview">
                 프로젝트 목록 보기 <span aria-hidden="true">↓</span>
               </a>
             </div>
@@ -215,11 +215,11 @@ export default function AutonomousDrivingPage() {
         </div>
 
         <section
-          id="project-overview"
-          className={`page-body-section surface-wash project-index ${styles.overviewSection}`}
+          id="projects-overview"
+          className={`page-body-section surface-wash project-index project-index-section ${styles.overviewSection}`}
           aria-label="Autonomous 프로젝트 목록 · Three project threads. 각 프로젝트는 모드→경계→출력이라는 하나의 판단 문법으로 읽을 수 있습니다."
         >
-          <div className={styles.overviewWrap}>
+          <div>
             <OverviewList projects={projectOverviews} />
           </div>
         </section>
