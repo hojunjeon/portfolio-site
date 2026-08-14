@@ -42,26 +42,6 @@
   padding-block: var(--space-lg);
 }
 
-.overviewIntro {
-  display: grid;
-  grid-template-columns: minmax(180px, 0.36fr) minmax(0, 1fr);
-  gap: var(--space-lg);
-  align-items: baseline;
-  margin-bottom: var(--space-xl);
-}
-
-.overviewIntro .eyebrow {
-  margin-bottom: 0;
-}
-
-.overviewIntro p:last-child {
-  max-width: 56ch;
-  margin: 0;
-  color: var(--ink-80);
-  font-size: 16px;
-  line-height: 1.5;
-}
-
 .overviewList {
   display: grid;
   min-width: 0;
@@ -96,6 +76,10 @@
 .overviewMessage,
 .overviewLink {
   min-width: 0;
+}
+
+.overviewLink {
+  min-inline-size: 44px;
 }
 
 .overviewType {
@@ -425,6 +409,22 @@
   border-top: 1px solid var(--hairline);
 }
 
+/* The shared layout owns the primary-media split. Keep the body siblings on
+   the full content rail; only their text children should establish measures. */
+:global(body) :global(.unified-project-detail) :global(.project-detail-body),
+:global(body) :global(.unified-project-detail) :global(.project-detail-body) > :global(.project-story),
+:global(body) :global(.unified-project-detail) :global(.project-detail-body) > :global(.project-visual),
+:global(body) :global(.unified-project-detail) :global(.project-detail-body) > :global(.project-keywords),
+:global(body) :global(.unified-project-detail) :global(.project-detail-body) > :global(.project-links) {
+  width: 100%;
+  max-width: none;
+}
+
+:global(body) :global(.unified-project-detail) :global(.project-detail-decision) {
+  width: 100%;
+  max-width: none;
+}
+
 /* Dark competition story keeps contrast through surface and type only. The
    shared layout owns header/primer/primary contrast; this route module only
    adjusts body-story rails and visual evidence. */
@@ -487,7 +487,6 @@
 }
 
 @media (max-width: 833px) {
-  .overviewIntro,
   .artifactHeading {
     grid-template-columns: 1fr;
     gap: var(--space-sm);
@@ -500,6 +499,10 @@
 
   .overviewMessage {
     grid-column: 2 / -1;
+  }
+
+  .overviewLink {
+    min-width: 44px !important;
   }
 
   .patrolBody,

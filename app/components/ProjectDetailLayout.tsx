@@ -60,7 +60,7 @@ export function ProjectDetailLayout({
     surface,
     dark ? styles.dark : "",
     className ?? "",
-  ].flatMap((value) => value.split(/\s+/).filter(Boolean)))).join(" ");
+  ].flatMap((value) => value.split(/\s+/).filter((token) => token && token !== "undefined")))).join(" ");
 
   return (
     <section id={id} className={rootClassName} aria-labelledby={titleId}>
@@ -101,12 +101,12 @@ export function ProjectDetailLayout({
               <p>{primer.flow}</p>
             </div>
           </aside>
-
-          <figure className={`project-detail-primary primary-media ${styles.primary}`}>
-            <img src={primary.src} alt={primary.alt} loading="eager" decoding="async" />
-            {primary.caption ? <figcaption>{primary.caption}</figcaption> : null}
-          </figure>
         </div>
+
+        <figure className={`project-detail-primary primary-media ${styles.primary}`}>
+          <img src={primary.src} alt={primary.alt} loading="eager" decoding="async" />
+          {primary.caption ? <figcaption>{primary.caption}</figcaption> : null}
+        </figure>
 
         <div className={`project-detail-body ${styles.body}`}>
           <div className={`project-detail-decision ${styles.decision}`}>

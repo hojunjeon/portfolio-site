@@ -9,13 +9,16 @@
   padding-block: clamp(48px, 5vw, 64px);
 }
 
-.root.dark {
+.root.dark,
+.root:global(.surface-dark) {
   color: var(--on-dark);
   background: var(--tile-1);
 }
 
-.root.dark :global(.project-intro-box) {
-  background: var(--tile-1);
+.root.dark :global(.project-intro-box),
+.root:global(.surface-dark) :global(.project-intro-box) {
+  color: var(--on-dark);
+  background: var(--tile-2);
   border-color: var(--tile-3);
 }
 
@@ -302,6 +305,7 @@
   :global(.project-intro-box) {
   grid-template-columns: minmax(48px, 0.1fr) minmax(0, 1fr);
   column-gap: var(--dense-space-16);
+  box-sizing: border-box;
 }
 
 .root.root:global(.unified-project-detail)
@@ -321,6 +325,131 @@
   width: auto;
   max-width: none;
   margin-inline: 0;
+  box-sizing: border-box;
+}
+
+/* The primary figure is a sibling of the intro box.  Keep the shell rail
+   full-width while constraining only the media itself, so wide source assets
+   are centered without being clipped by a card or an overflow hidden rule. */
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-primary) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: visible;
+}
+
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-primary)
+  > img {
+  display: block;
+  width: min(100%, 960px);
+  max-width: 960px;
+  height: auto;
+  object-fit: contain;
+  overflow: visible;
+}
+
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-primary)
+  > figcaption {
+  width: min(100%, 960px);
+  max-width: 960px;
+  margin-top: 8px;
+  align-self: center;
+  box-sizing: border-box;
+}
+
+/* All body slots consume the shell rail.  Readable measure belongs to text
+   inside `.project-story`, never to the structural outer slot itself. */
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-body),
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-body)
+  > :global(.project-detail-decision),
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-body)
+  > :global(.project-story),
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-body)
+  > :global(.project-visual),
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-body)
+  > :global(.project-keywords),
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-body)
+  > :global(.project-links) {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.root.root:global(.unified-project-detail)
+  :global(.project-detail-shell)
+  > :global(.project-detail-body)
+  > :global(.project-story)
+  :is(p, h2, h3, h4, blockquote) {
+  max-width: 72ch;
+}
+
+/* Dark projects use two explicit surface levels: tile-1 for the parent rail
+   and tile-2 for the intro box.  Tile-3 separators keep the boundary visible
+   while the on-dark tokens preserve readable contrast. */
+.root.root.dark,
+.root.root:global(.surface-dark) {
+  color: var(--on-dark);
+  background: var(--tile-1);
+}
+
+.root.root.dark
+  :global(.project-detail-shell)
+  > :global(.project-intro-box),
+.root.root:global(.surface-dark)
+  :global(.project-detail-shell)
+  > :global(.project-intro-box) {
+  color: var(--on-dark);
+  background: var(--tile-2);
+  border-color: var(--tile-3);
+}
+
+.root.root.dark
+  :global(.project-detail-shell)
+  > :global(.project-intro-box)
+  :is(:global(.project-detail-facts) > div, :global(.project-detail-primer) > div),
+.root.root:global(.surface-dark)
+  :global(.project-detail-shell)
+  > :global(.project-intro-box)
+  :is(:global(.project-detail-facts) > div, :global(.project-detail-primer) > div) {
+  border-top-color: var(--tile-3);
+}
+
+.root.root.dark
+  :global(.project-detail-shell)
+  > :global(.project-detail-body)
+  > :global(.project-detail-decision),
+.root.root:global(.surface-dark)
+  :global(.project-detail-shell)
+  > :global(.project-detail-body)
+  > :global(.project-detail-decision) {
+  color: var(--on-dark);
+  border-top-color: var(--tile-3);
+  border-bottom-color: var(--tile-3);
 }
 
 .root:global(.surface-dark),
@@ -330,6 +459,7 @@
 }
 
 .root:global(.surface-dark) :global(.project-intro-box) {
+  background: var(--tile-2);
   border-color: var(--tile-3);
 }
 

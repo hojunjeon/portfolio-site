@@ -214,12 +214,12 @@ export default function AutonomousDrivingPage() {
           </PageTitle>
         </div>
 
-        <section id="project-overview" className={`page-body-section surface-wash project-index ${styles.overviewSection}`} aria-label="Autonomous 프로젝트 목록">
+        <section
+          id="project-overview"
+          className={`page-body-section surface-wash project-index ${styles.overviewSection}`}
+          aria-label="Autonomous 프로젝트 목록 · Three project threads. 각 프로젝트는 모드→경계→출력이라는 하나의 판단 문법으로 읽을 수 있습니다."
+        >
           <div className={styles.overviewWrap}>
-            <div className={styles.overviewIntro}>
-              <p className="eyebrow">Three project threads</p>
-              <p>각 프로젝트는 모드→경계→출력이라는 하나의 판단 문법으로 읽을 수 있습니다.</p>
-            </div>
             <OverviewList projects={projectOverviews} />
           </div>
         </section>

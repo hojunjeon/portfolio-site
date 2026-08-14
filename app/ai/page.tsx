@@ -142,7 +142,7 @@ export default function AiPage() {
 
         <section id="projects-overview" className={`page-body-section surface-wash project-index ${styles.overviewSection}`} aria-label="AI 프로젝트 목록">
           <div>
-            <div className={`project-index ${styles.overviewGrid}`}>
+            <div className="project-index">
               {projectOverviews.map((project) => <OverviewItem key={project.index} project={project} />)}
             </div>
           </div>
