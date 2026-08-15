@@ -244,7 +244,6 @@ export default function AutonomousDrivingPage() {
           primary={{
             src: "/evidence/autonomous/ggeolgeol/ggeolgeol-driving-8x.gif",
             alt: "걸음걸음 로봇이 점자블록 옆을 주행하는 실제 주행 기록 GIF",
-            caption: "실제 주행 기록 · 점자블록 옆으로 offset 경로를 유지하는 순찰",
           }}
           decision="일반 보도블록 구간도 달려야 해서 일반 보도블록 주행 모드를 추가하고 점자블록 주행 모드와 라우팅했습니다."
           body={<PatrolBody />}
@@ -273,7 +272,6 @@ export default function AutonomousDrivingPage() {
           primary={{
             src: "/evidence/autonomous/competition/futurecar-2024-official.png",
             alt: "제3회 미래형자동차 자율주행 SW 경진대회 공식 포스터",
-            caption: "공식 대회 포스터 · 센서 인식이 차량 제어로 넘어가는 경계",
           }}
           decision="인식 결과가 속도·조향 명령으로 넘어가는 제어 경계를 맡았습니다."
           body={<CompetitionBody />}
