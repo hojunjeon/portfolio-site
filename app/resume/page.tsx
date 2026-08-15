@@ -431,6 +431,14 @@ export default function ResumePage() {
             <div className="resume-section-title"><span className="section-number">04</span><h2 id="additional-title">Awards &amp; Additional Work</h2></div>
             <div className="content-grid">
               <article className="info-card">
+                <p className="card-kicker">수상</p>
+                <h3>SSAFY 1학기 관통 프로젝트 우수상</h3>
+                <p>2026.06.26 · PathFinder 관통 프로젝트 · 서울6반 2등</p>
+                <ul className="pill-list" aria-label="SSAFY 1학기 관통 프로젝트 수상 정보">
+                  {["SSAFY 15기", "팀 프로젝트", "서울6반 2등"].map((item) => <li key={item}>{item}</li>)}
+                </ul>
+              </article>
+              <article className="info-card">
                 <p className="card-kicker">활동</p>
                 <h3>배드민턴 동아리 운영기획부장</h3>
                 <p>한국공학대학교 · 랜덤 매칭, 홍보전 부스, 신입 환영회, MT 운영</p>
