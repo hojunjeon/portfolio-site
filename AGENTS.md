@@ -1,5 +1,13 @@
 # Portfolio site agent instructions
 
+## Information architecture and naming
+
+- The site has five pages: Main (메인페이지, `/`), Resume (`/resume`), AI (`/ai`), Robotics (`/robotics`), and Autonomous (`/autonomous-driving`).
+- AI, Robotics, and Autonomous are the project pages (프로젝트 페이지).
+- Each project page follows this top-level order: Header (헤더) → Table of contents (목차) → Project detail introduction (프로젝트 상세 소개).
+- The project detail introduction follows this section order: Header (헤더) → Usage context / operation flow (사용 맥락/동작 흐름) → Representative image (대표 이미지) → Development · key decisions (전개 · 핵심 판단) → Technology stack (기술 스택).
+- The Development · key decisions (전개 · 핵심 판단) section uses one of four types: Troubleshooting (트러블슈팅형), Problem redefinition (문제 재정의형), Operational improvement (운영 고도화형), or Development stage (개발 단계형).
+
 ## Site change rule
 
 - Any user request that changes this site’s UI, content, interaction, assets, or deployment configuration includes the complete delivery flow: validate, commit, push, deploy, and verify. Do not stop at a local edit or a successful build unless the user explicitly requests local-only work.
