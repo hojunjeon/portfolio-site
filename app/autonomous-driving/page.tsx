@@ -111,11 +111,7 @@ function PatrolModes() {
 
 function EnvironmentFigure() {
   return (
-    <figure className={styles.signatureArtifact}>
-      <div className={styles.artifactHeading}>
-        <p className={styles.sectionTag}>signature artifact · environment boundary</p>
-        <p>실행 환경을 고정한 뒤 node, namespace, 시나리오를 순서대로 검증합니다.</p>
-      </div>
+    <figure className={`${styles.signatureArtifact} ${styles.environmentArtifact}`}>
       <div className={styles.artifactFrame}>
         <img
           src="/evidence/autonomous/generated/ros2-diagnostic-concept.png"
@@ -168,6 +164,22 @@ function CompetitionBody() {
         </ol>
       </div>
     </div>
+  );
+}
+
+function CompetitionControlBoundary() {
+  return (
+    <figure className={`${styles.signatureArtifact} ${styles.controlBoundaryArtifact}`}>
+      <div className={styles.artifactFrame}>
+        <img
+          src="/evidence/autonomous/generated/competition-control-boundary.png"
+          alt="Camera·LiDAR 입력이 인식·경로·제어를 거쳐 차량의 속도·조향 명령으로 이어지는 제어 경계 개념 시각화 · 생성 이미지"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <figcaption>Camera · LiDAR → 인식·경로·제어 → 차량 명령 · 개념 시각화</figcaption>
+    </figure>
   );
 }
 
@@ -275,6 +287,7 @@ export default function AutonomousDrivingPage() {
           }}
           decision="인식 결과가 속도·조향 명령으로 넘어가는 제어 경계를 맡았습니다."
           body={<CompetitionBody />}
+          visual={<CompetitionControlBoundary />}
           keywords={["ROS", "OpenCV", "LiDAR", "초음파 센서", "Camera"]}
         />
 

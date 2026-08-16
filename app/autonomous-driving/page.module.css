@@ -135,6 +135,11 @@
 .signatureArtifact {
   min-width: 0;
   margin: 0;
+  align-self: start;
+}
+
+.environmentArtifact {
+  align-self: start;
 }
 
 .artifactFrame {
@@ -151,6 +156,16 @@
   max-width: 100%;
   height: auto;
   object-fit: contain;
+}
+
+.controlBoundaryArtifact .artifactFrame img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.environmentArtifact .artifactFrame img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
 .signatureArtifact > figcaption {
@@ -281,7 +296,8 @@
 }
 
 .diagnosticBody {
-  gap: var(--space-xl);
+  gap: clamp(16px, 2.2vw, 28px);
+  align-content: start;
 }
 
 .diagnosticBeforeAfter {
@@ -289,6 +305,14 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-lg);
   min-width: 0;
+  align-items: start;
+  align-content: start;
+  grid-auto-rows: max-content;
+}
+
+.diagnosticBeforeAfter article {
+  align-self: start;
+  min-height: 0;
 }
 
 .diagnosticBeforeAfter article + article {
@@ -301,6 +325,9 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-lg);
+  align-items: start;
+  align-content: start;
+  grid-auto-rows: max-content;
 }
 
 .diagnosticSteps li {
@@ -310,6 +337,8 @@
   min-width: 0;
   padding-top: var(--space-sm);
   border-bottom: 1px solid var(--hairline);
+  align-self: start;
+  align-content: start;
 }
 
 .diagnosticSteps p {
